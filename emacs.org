@@ -286,9 +286,8 @@ Enable org mode to automatically write source blocks to the correct config file 
              (ispell-local-dictionary "en_US")
              (ispell-local-dictionary-alist
               '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
-             (ispell-hunspell-dictionary-alist ispell-local-dictionary-alist)))
-
-(setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist)
+             (ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
+             (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
 
   (dolist (hook '(text-mode-hook))
     (add-hook hook (lambda () (flyspell-mode 1))))
