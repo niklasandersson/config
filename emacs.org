@@ -105,6 +105,10 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 #+end_src
 ** Projectile
 #+begin_src emacs-lisp
+
+   (defvar na/project-directory (format "%sProjects/" na/home-directory))
+  na/project-directory
+  
   (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
@@ -112,10 +116,7 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
-  ;; NOTE: Set this to the folder where you keep your Git repos!
-  (when (file-directory-p "~/Projects/")
-    (setq projectile-project-search-path '("~/Projects/")))
-  (setq projectile-switch-project-action #'projectile-dired))
+  (setq projectile-project-search-path (list na/project-directory)))
 
   (use-package counsel-projectile
     :config (counsel-projectile-mode))
