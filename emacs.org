@@ -90,6 +90,9 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1))
+
+(display-time)
+(setq display-time-24hr-format t)
 #+end_src
 ** Helpful
 #+begin_src emacs-lisp
