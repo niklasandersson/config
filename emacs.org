@@ -303,6 +303,8 @@ Enable org mode to automatically write source blocks to the correct config file 
            (setq-local electric-pair-inhibit-predicate
                    `(lambda (c)
                   (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+
+(show-paren-mode 1)
 #+end_src
 ** Set custom file
 #+begin_src emacs-lisp
