@@ -280,7 +280,7 @@ Enable org mode to automatically write source blocks to the correct config file 
 * Behavior settings
 ** Spell-checking
 #+begin_src emacs-lisp
-  (use-package ispell
+    (use-package ispell
     :init
     (setenv "DICTIONARY" "en_US")
     (setenv "DICPATH" "C:\\Hunspell")
@@ -288,9 +288,10 @@ Enable org mode to automatically write source blocks to the correct config file 
     :custom ((ispell-program-name "C:\\Hunspell\\hunspell")
              (ispell-local-dictionary "en_US")
              (ispell-local-dictionary-alist
-              '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
-             (ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
-             (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
+              '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))))
+
+  (when (eq system-type 'windows-nt)
+    (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
 
   (dolist (hook '(text-mode-hook))
     (add-hook hook (lambda () (flyspell-mode 1))))
