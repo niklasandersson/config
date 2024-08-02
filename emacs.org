@@ -310,6 +310,13 @@ Enable org mode to automatically write source blocks to the correct config file 
 
 (show-paren-mode 1)
 #+end_src
+** File encoding on Windows
+#+begin_src emacs-lisp
+  (when (eq system-type 'windows-nt)
+    (prefer-coding-system 'utf-8-unix)
+    (setq coding-system-for-read 'utf-8-unix)
+    (setq coding-system-for-write 'utf-8-unix))
+#+end_src
 ** Set custom file
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/emacs-custom.el")
