@@ -328,3 +328,7 @@ Enable org mode to automatically write source blocks to the correct config file 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
 #+end_src
+** Custom keybindings
+#+begin_src emacs-lisp
+(global-set-key "g" 'magit)
+#+end_src
