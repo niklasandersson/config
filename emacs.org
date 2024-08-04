@@ -289,12 +289,12 @@ Enable org mode to automatically write source blocks to the correct config file 
     (use-package ispell
     :init
     (setenv "DICTIONARY" "en_US")
-    (setenv "DICPATH" "C:\\Hunspell")
+    (ispell-local-dictionary "en_US")
+    (ispell-local-dictionary-alist
+    '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
     :if (eq system-type 'windows-nt)
-    :custom ((ispell-program-name "C:\\Hunspell\\hunspell")
-             (ispell-local-dictionary "en_US")
-             (ispell-local-dictionary-alist
-              '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))))
+    :custom ((setenv "DICPATH" "C:\\Hunspell")
+    (ispell-program-name "C:\\Hunspell\\hunspell")))
 
   (when (eq system-type 'windows-nt)
     (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
