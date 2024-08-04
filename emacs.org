@@ -266,7 +266,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 Enables export from org-mode to Jupyter. Package need to be manually downloaded from https://github.com/zaeph/ox-ipynb.  
 #+begin_src emacs-lisp
   (use-package ox-ipynb
-    :load-path "~/.emacs.d/")
+    :load-path "~/lisp/.emacs.d/")
 #+end_src
 ** Auto-tangle config on save
 Enable org mode to automatically write source blocks to the correct config file on save.
