@@ -332,5 +332,6 @@ Enable org mode to automatically write source blocks to the correct config file 
 #+end_src
 ** Custom keybindings
 #+begin_src emacs-lisp
-(global-set-key (kbd "C-c g") 'magit)
+  (global-set-key (kbd "C-c g") 'magit)
+  (global-set-key (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
 #+end_src
