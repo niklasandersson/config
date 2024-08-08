@@ -285,21 +285,16 @@ Enable org mode to automatically write source blocks to the correct config file 
 * Behavior settings
 ** Spell-checking
 #+begin_src emacs-lisp
-    (use-package ispell
+  (when (string-equal system-type "windows-nt")
+    (setq ispell-program-name "C:\\msys64\\usr\\bin\\aspell")
+    (setq ispell-aspell-data-dir "C:\\msys64\\usr\\lib\\aspell-0.60\\")
+    (setq ispell-aspell-dict-dir "C:\\msys64\\usr\\lib\\aspell-0.60\\"))
+
+  (use-package flyspell
+    :ensure t
     :init
-    (setenv "DICTIONARY" "en_US")
-    (ispell-local-dictionary "en_US")
-    (ispell-local-dictionary-alist
-    '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
-    :if (eq system-type 'windows-nt)
-    :custom ((setenv "DICPATH" "C:\\Hunspell")
-    (ispell-program-name "C:\\Hunspell\\hunspell")))
-
-  (when (eq system-type 'windows-nt)
-    (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist))
-
-  (dolist (hook '(text-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode 1))))
+    (add-hook 'org-mode-hook
+              (lambda () (flyspell-mode 1))))
 #+end_src
 ** Remove whitespaces
 #+begin_src emacs-lisp
