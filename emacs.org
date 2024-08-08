@@ -296,6 +296,14 @@ Enable org mode to automatically write source blocks to the correct config file 
     (add-hook 'org-mode-hook
               (lambda () (flyspell-mode 1))))
 #+end_src
+
+*** Setup for Windows
+1. Install MSYS2 from https://www.msys2.org/ .
+2. Install package aspell and make using commands  "pacman -S aspell" and "pacman -S make"
+3. Downloads dictionaries from https://ftp.gnu.org/gnu/aspell/dict/0index.html#0.60
+4. Unpack dictionaries to a folder in MSYS2.
+5. Browse to folder and run "./configure", "make" and "make install"
+
 ** Remove whitespaces
 #+begin_src emacs-lisp
 (add-hook 'before-save-hook #'delete-trailing-whitespace nil t)
