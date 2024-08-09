@@ -1,5 +1,4 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/init.el    
-
 * Variables
 ** Home directory
 #+begin_src emacs-lisp
@@ -11,22 +10,23 @@
 ** Initialize packages and package archives
 Add all archives and make sure use-package is enabled.
 #+begin_src emacs-lisp
-  (require 'package)
+    (require 'package)
 
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")
-                             ( "jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/")))
+    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                             ("org" . "https://orgmode.org/elpa/")
+                             ("elpa" . "https://elpa.gnu.org/packages/")
+                               ( "jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/")
+                               ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
+    (package-initialize)
+    (unless package-archive-contents
+      (package-refresh-contents))
 
-  (unless (package-installed-p 'use-package)
-     (package-install 'use-package))
+    (unless (package-installed-p 'use-package)
+       (package-install 'use-package))
 
-  (require 'use-package)
-  (setq use-package-always-ensure t)
+    (require 'use-package)
+    (setq use-package-always-ensure t)
 #+end_src
 
 ** Ivy and counsel
@@ -266,6 +266,63 @@ Enables export from org-mode to Jupyter. Package need to be manually downloaded 
 #+begin_src emacs-lisp
   (use-package ox-ipynb
     :load-path "~/.emacs.d/lisp/")
+#+end_src
+** Org-present
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'org-present)
+  (package-install 'org-present))
+
+(defun my/org-present-prepare-slide (buffer-name heading)
+  ;; Show only top-level headlines
+  (org-overview)
+
+  ;; Unfold the current entry
+  (org-show-entry)
+
+  ;; Show only direct subheadings of the slide but don't expand them
+  (org-show-children))
+
+(defun my/org-present-start ()
+  ;; Tweak font sizes
+  (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+                                     (header-line (:height 4.0) variable-pitch)
+                                     (org-document-title (:height 1.75) org-document-title)
+                                     (org-code (:height 1.55) org-code)
+                                     (org-verbatim (:height 1.55) org-verbatim)
+                                     (org-block (:height 1.25) org-block)
+                                     (org-block-begin-line (:height 0.7) org-block)))
+
+  ;; Set a blank header line string to create blank space at the top
+  (setq header-line-format " ")
+
+  ;; Display inline images automatically
+  (org-display-inline-images)
+
+  ;; Center the presentation and wrap lines
+  (visual-fill-column-mode 1)
+  (visual-line-mode 1))
+
+(defun my/org-present-end ()
+  ;; Reset font customizations
+  (setq-local face-remapping-alist '((default variable-pitch default)))
+
+  ;; Clear the header line string so that it isn't displayed
+  (setq header-line-format nil)
+
+  ;; Stop displaying inline images
+  (org-remove-inline-images)
+
+  ;; Stop centering the document
+  (visual-fill-column-mode 0)
+  (visual-line-mode 0))
+
+;; Turn on variable pitch fonts in Org Mode buffers
+(add-hook 'org-mode-hook 'variable-pitch-mode)
+
+;; Register hooks with org-present
+(add-hook 'org-present-mode-hook 'my/org-present-start)
+(add-hook 'org-present-mode-quit-hook 'my/org-present-end)
+(add-hook 'org-present-after-navigate-functions 'my/org-present-prepare-slide)
 #+end_src
 ** Auto-tangle config on save
 Enable org mode to automatically write source blocks to the correct config file on save.
