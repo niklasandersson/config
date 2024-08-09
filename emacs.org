@@ -324,6 +324,10 @@ Enables export from org-mode to Jupyter. Package need to be manually downloaded 
 (add-hook 'org-present-mode-quit-hook 'my/org-present-end)
 (add-hook 'org-present-after-navigate-functions 'my/org-present-prepare-slide)
 #+end_src
+** Org-download
+#+begin_src emacs-lisp
+
+#+end_src
 ** Auto-tangle config on save
 Enable org mode to automatically write source blocks to the correct config file on save.
 #+begin_src emacs-lisp
