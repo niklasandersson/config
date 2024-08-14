@@ -360,6 +360,10 @@ Enable org mode to automatically write source blocks to the correct config file 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'na/org-babel-tangle-config)))
 #+end_src
 * Behavior settings
+** Default folder
+#+begin_src emacs-lisp
+ (cd na/org-agenda-path)
+#+end_src
 ** Spell-checking
 #+begin_src emacs-lisp
   (when (string-equal system-type "windows-nt")
