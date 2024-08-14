@@ -215,6 +215,8 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
+  (load "~/.emacs.d/lisp/org_agenda_path.el")
+  
   (use-package org
     :hook (org-mode . na/org-mode-setup)
     :config
@@ -224,7 +226,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
     (setq org-agenda-files
-          '( ""))
+          (list na/org-agenda-path))
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
     (na/org-font-setup))
 #+end_src
