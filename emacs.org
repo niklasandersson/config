@@ -6,6 +6,12 @@
     (cond ((eq system-type 'windows-nt) (format "c:/Users/%s/" user-login-name))
           (t "~/")))
 #+end_src
+
+** From external files
+#+begin_src emacs-lisp
+  (load "~/.emacs.d/lisp/org_agenda_path.el")
+  (load "~/.emacs.d/lisp/openai_api.el")
+#+end_src
 * Packages
 ** Initialize packages and package archives
 Add all archives and make sure use-package is enabled.
@@ -129,7 +135,6 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 #+end_src
 ** gptel
 #+begin_src emacs-lisp
-  (load "~/.emacs.d/lisp/openai_api.el")
   (use-package gptel
     :custom (gptel-api-key na/openai-api-key))
 
@@ -214,9 +219,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
-
-  (load "~/.emacs.d/lisp/org_agenda_path.el")
-  
+ 
   (use-package org
     :hook (org-mode . na/org-mode-setup)
     :config
