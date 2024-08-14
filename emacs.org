@@ -371,11 +371,14 @@ Enable org mode to automatically write source blocks to the correct config file 
     (setq ispell-aspell-data-dir "C:\\msys64\\usr\\lib\\aspell-0.60\\")
     (setq ispell-aspell-dict-dir "C:\\msys64\\usr\\lib\\aspell-0.60\\"))
 
+  (setq ispell-local-dictionary "sv")
+
   (use-package flyspell
     :ensure t
     :init
     (add-hook 'org-mode-hook
-              (lambda () (flyspell-mode 1))))
+              (lambda () (flyspell-mode 1)))
+    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
 #+end_src
 
 *** Setup for Windows
@@ -416,4 +419,5 @@ Enable org mode to automatically write source blocks to the correct config file 
   (global-set-key (kbd "C-c g") 'magit)
   (global-set-key (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
   (global-set-key (kbd "C-c c") 'gptel)
+  (global-set-key (kbd "C-c l") 'ispell-change-dictionary)
 #+end_src
