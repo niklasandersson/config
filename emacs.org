@@ -195,50 +195,73 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 * Org-mode
 ** Setup org-mode
 #+begin_src emacs-lisp
-      (defun na/org-mode-setup ()
-        (org-indent-mode)
-        (variable-pitch-mode 1)
-        (visual-line-mode 1))
+  (setq calendar-week-start-day 1)
+  (setq window-combination-resize t
+        split-width-threshold 300)
 
-      (defun na/org-font-setup ()
-        (font-lock-add-keywords 'org-mode
-                                '(("^ *\\([-]\\) "
-                                   (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  (copy-face font-lock-constant-face 'calendar-iso-week-face)
+  (set-face-attribute 'calendar-iso-week-face nil
+                      :height 0.7)
+  (setq calendar-intermonth-text
+        '(propertize
+          (format "%2d"
+                  (car
+                   (calendar-iso-from-absolute
+                    (calendar-absolute-from-gregorian (list month day year)))))
+          'font-lock-face 'calendar-iso-week-face))
 
-        (dolist (face '((org-level-1 . 1.2)
-                        (org-level-2 . 1.1)
-                        (org-level-3 . 1.05)
-                        (org-level-4 . 1.0)
-                        (org-level-5 . 1.1)
-                        (org-level-6 . 1.1)
-                        (org-level-7 . 1.1)
-                        (org-level-8 . 1.1)))
-          (set-face-attribute (car face) nil :family "Fira Code Retina" :weight 'regular :height (cdr face)))
+  (copy-face 'default 'calendar-iso-week-header-face)
+  (set-face-attribute 'calendar-iso-week-header-face nil
+                      :height 0.7)
+  (setq calendar-intermonth-header
+        (propertize "Wk"               
+                    'font-lock-face 'calendar-iso-week-header-face))
 
-        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-        (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-        (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
-        (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-        (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-        (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-        (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+  (defun na/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (visual-line-mode 1))
 
-      (use-package org
-        :hook (org-mode . na/org-mode-setup)
-        :config
-        (setq org-ellipsis " ▾")
+  (defun na/org-font-setup ()
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-        (setq org-agenda-start-with-log-mode t)
-        (setq org-log-done 'time)
-        (setq org-log-into-drawer t)
-        (setq org-agenda-files
-              (list na/org-agenda-path))
-        (setq org-refile-targets
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :family "Fira Code Retina" :weight 'regular :height (cdr face)))
+
+    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+
+  (use-package org
+    :hook (org-mode . na/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
+
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+    (setq org-agenda-files
+          (list na/org-agenda-path))
+    (setq org-refile-targets
           '(("archive.org" :maxlevel . 1)
             ("task.org" :maxlevel . 1)
             ("students.org" :maxlevel . 1)))
-        (advice-add 'org-refile :after 'org-save-all-org-buffers)
-        (na/org-font-setup))
+    (setq org-agenda-start-on-weekday 1)
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+    (na/org-font-setup))
 #+end_src
 ** Org-superstar
 #+begin_src emacs-lisp
