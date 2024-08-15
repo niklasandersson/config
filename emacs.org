@@ -181,57 +181,64 @@ Enable line numbers globally but disable for certain modes.
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
 #+begin_src emacs-lisp
-(defvar na/default-font-size 120)
-(set-face-attribute 'default nil :font "Fira Code Retina" :height na/default-font-size)
 
-(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height na/default-font-size)
+  (defvar na/default-font-size 120)
 
-(set-face-attribute 'variable-pitch nil :font "Cantarell" :height na/default-font-size :weight 'regular)
+  (set-face-attribute 'default nil :family "Fira Code Retina" :height na/default-font-size)
+
+  (set-face-attribute 'fixed-pitch nil :family "Fira Code Retina" :height na/default-font-size)
+
+  (set-face-attribute 'variable-pitch nil :family "Cantarell" :height na/default-font-size :weight 'regular)
+
 #+end_src
 
 * Org-mode
 ** Setup org-mode
 #+begin_src emacs-lisp
-  (defun na/org-mode-setup ()
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (visual-line-mode 1))
+      (defun na/org-mode-setup ()
+        (org-indent-mode)
+        (variable-pitch-mode 1)
+        (visual-line-mode 1))
 
-  (defun na/org-font-setup ()
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+      (defun na/org-font-setup ()
+        (font-lock-add-keywords 'org-mode
+                                '(("^ *\\([-]\\) "
+                                   (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Fira Code Retina" :weight 'regular :height (cdr face)))
+        (dolist (face '((org-level-1 . 1.2)
+                        (org-level-2 . 1.1)
+                        (org-level-3 . 1.05)
+                        (org-level-4 . 1.0)
+                        (org-level-5 . 1.1)
+                        (org-level-6 . 1.1)
+                        (org-level-7 . 1.1)
+                        (org-level-8 . 1.1)))
+          (set-face-attribute (car face) nil :family "Fira Code Retina" :weight 'regular :height (cdr face)))
 
-    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
- 
-  (use-package org
-    :hook (org-mode . na/org-mode-setup)
-    :config
-    (setq org-ellipsis " ▾")
+        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+        (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+        (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+        (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+        (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+        (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-agenda-files
-          (list na/org-agenda-path))
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
-    (na/org-font-setup))
+      (use-package org
+        :hook (org-mode . na/org-mode-setup)
+        :config
+        (setq org-ellipsis " ▾")
+
+        (setq org-agenda-start-with-log-mode t)
+        (setq org-log-done 'time)
+        (setq org-log-into-drawer t)
+        (setq org-agenda-files
+              (list na/org-agenda-path))
+        (setq org-refile-targets
+          '(("archive.org" :maxlevel . 1)
+            ("task.org" :maxlevel . 1)
+            ("students.org" :maxlevel . 1)))
+        (advice-add 'org-refile :after 'org-save-all-org-buffers)
+        (na/org-font-setup))
 #+end_src
 ** Org-superstar
 #+begin_src emacs-lisp
@@ -420,4 +427,5 @@ Enable org mode to automatically write source blocks to the correct config file 
   (global-set-key (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
   (global-set-key (kbd "C-c c") 'gptel)
   (global-set-key (kbd "C-c l") 'ispell-change-dictionary)
+  (global-set-key (kbd "C-c a") 'org-agenda)
 #+end_src
