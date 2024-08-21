@@ -257,6 +257,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (setq org-ellipsis " ▾")
 
     (setq org-agenda-start-with-log-mode t)
+    (setq org-agenda-window-setup 'other-frame)    
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
     (setq org-agenda-files
@@ -290,7 +291,6 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (setq org-hide-leading-stars nil)
   (setq org-superstar-leading-bullet ?\s)
   (setq org-indent-mode-turns-on-hiding-stars nil)
-
 
 #+end_src
 ** Org-babel
