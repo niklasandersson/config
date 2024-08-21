@@ -286,6 +286,12 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (setq org-superstar-cycle-headline-bullets nil)
 
   (setq org-superstar-leading-fallback ?\s)
+
+  (setq org-hide-leading-stars nil)
+  (setq org-superstar-leading-bullet ?\s)
+  (setq org-indent-mode-turns-on-hiding-stars nil)
+
+
 #+end_src
 ** Org-babel
 #+begin_src emacs-lisp
@@ -378,7 +384,6 @@ Enables export from org-mode to Jupyter. Package need to be manually downloaded 
 #+begin_src emacs-lisp
   (use-package org-download)
 #+end_src
-
 
 ** Auto-tangle config on save
 Enable org mode to automatically write source blocks to the correct config file on save.
