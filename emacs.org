@@ -141,6 +141,12 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
   (add-to-list 'load-path "~/.emacs.d/lisp/")
   (require 'gptel-extensions)
 #+end_src
+** ox-pandoc
+*** Dependencies
+**** Pandoc
+#+begin_src emacs-lisp
+(use-package ox-pandoc)
+#+end_src
 * Basic GUI configuration
 ** The basics
 Remove all unwanted GUI Elements.
