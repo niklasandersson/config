@@ -454,7 +454,13 @@ Enable org mode to automatically write source blocks to the correct config file 
   (setq coding-system-for-read 'utf-8-unix)
   (setq coding-system-for-write 'utf-8-unix)
 #+end_src
-
+** Backup files
+#+begin_src emacs-lisp
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+#+end_src
 ** Set custom file
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/emacs-custom.el")
