@@ -86,7 +86,7 @@ Which-key is likely soon going to be added as standard to Emacs.
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 ** Doom-modeline
-All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install and M-x nerd-icons-install-fonts. 
+All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install-fonts and M-x nerd-icons-install-fonts. 
 #+begin_src emacs-lisp
 (use-package all-the-icons
   :if (display-graphic-p))
