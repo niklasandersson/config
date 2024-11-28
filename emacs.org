@@ -185,7 +185,7 @@ Enable line numbers globally but disable for certain modes.
 #+begin_src emacs-lisp
 (use-package catppuccin-theme)
 (load-theme 'catppuccin :no-confirm)
-(setq catppuccin-flavor 'mocha)
+(setq catppuccin-flavor 'frappe)
 (catppuccin-reload)
 #+end_src
 
