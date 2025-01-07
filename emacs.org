@@ -453,7 +453,9 @@ Enable org mode to automatically write source blocks to the correct config file 
   (prefer-coding-system 'utf-8-unix)
   (setq coding-system-for-read 'utf-8-unix)
   (setq coding-system-for-write 'utf-8-unix)
+  (set-clipboard-coding-system 'utf-8)
 #+end_src
+
 ** Backup files
 #+begin_src emacs-lisp
   (setq backup-directory-alist
