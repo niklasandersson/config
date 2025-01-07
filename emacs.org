@@ -35,6 +35,9 @@ Add all archives and make sure use-package is enabled.
     (setq use-package-always-ensure t)
 #+end_src
 
+#+RESULTS:
+: t
+
 ** Ivy and counsel
 #+begin_src emacs-lisp
   (use-package ivy
@@ -183,11 +186,11 @@ Enable line numbers globally but disable for certain modes.
 
 ** Theme settings
 #+begin_src emacs-lisp
-(use-package catppuccin-theme)
-(load-theme 'catppuccin :no-confirm)
-(setq catppuccin-flavor 'mocha)
-(catppuccin-reload)
-#+end_src
+  (load-theme 'modus-operandi)
+#+End_src
+
+#+RESULTS:
+: t
 
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
