@@ -11,7 +11,9 @@
 #+begin_src emacs-lisp
   (load "~/.emacs.d/lisp/org_agenda_path.el")
   (load "~/.emacs.d/lisp/openai_api.el")
+  (load "~/.emacs.d/lisp/org_reveal_path.el")
 #+end_src
+
 * Packages
 ** Initialize packages and package archives
 Add all archives and make sure use-package is enabled.
@@ -155,6 +157,12 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 #+begin_src emacs-lisp
 (use-package ox-pandoc)
 #+end_src
+** org-reveal
+#+begin_src emacs-lisp
+  (use-package ox-reveal)
+  (setq org-reveal-root na/org-reveal-path)
+#+end_src
+
 * Basic GUI configuration
 ** The basics
 Remove all unwanted GUI Elements.
