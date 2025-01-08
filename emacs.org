@@ -397,6 +397,10 @@ Enable org mode to automatically write source blocks to the correct config file 
 #+begin_src emacs-lisp
  (cd na/org-agenda-path)
 #+end_src
+** Text handling
+#+begin_src emacs-lisp
+(delete-selection-mode 1)
+#+end_src
 ** Spell-checking
 #+begin_src emacs-lisp
   (when (string-equal system-type "windows-nt")
@@ -442,7 +446,6 @@ Enable org mode to automatically write source blocks to the correct config file 
   (setq coding-system-for-write 'utf-8-unix)
   (set-clipboard-coding-system 'utf-8)
 #+end_src
-
 ** Backup files
 #+begin_src emacs-lisp
   (setq backup-directory-alist
