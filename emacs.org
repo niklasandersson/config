@@ -35,6 +35,9 @@ Add all archives and make sure use-package is enabled.
     (setq use-package-always-ensure t)
 #+end_src
 
+#+RESULTS:
+: t
+
 ** Ivy and counsel
 #+begin_src emacs-lisp
   (use-package ivy
@@ -86,7 +89,7 @@ Which-key is likely soon going to be added as standard to Emacs.
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 ** Doom-modeline
-All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install and M-x nerd-icons-install-fonts. 
+All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install-fonts and M-x nerd-icons-install-fonts. 
 #+begin_src emacs-lisp
 (use-package all-the-icons
   :if (display-graphic-p))
@@ -173,21 +176,12 @@ Enable line numbers globally but disable for certain modes.
 
   (column-number-mode)
   (global-display-line-numbers-mode t)
-
-  (dolist (mode '(org-mode-hook
-                term-mode-hook
-		shell-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 ** Theme settings
 #+begin_src emacs-lisp
-(use-package catppuccin-theme)
-(load-theme 'catppuccin :no-confirm)
-(setq catppuccin-flavor 'frappe)
-(catppuccin-reload)
-#+end_src
+  (load-theme 'modus-operandi)
+#+End_src
 
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
@@ -256,24 +250,26 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
-  (use-package org
-    :hook (org-mode . na/org-mode-setup)
-    :config
-    (setq org-ellipsis " ▾")
+  ;; (use-package org
+  ;;   :hook (org-mode . na/org-mode-setup)
+  ;;   :config
+  ;;   (setq org-ellipsis " ▾")
 
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-agenda-window-setup 'other-frame)    
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-agenda-files
-          (list na/org-agenda-path))
-    (setq org-refile-targets
-          '(("archive.org" :maxlevel . 1)
-            ("task.org" :maxlevel . 1)
-            ("students.org" :maxlevel . 1)))
-    (setq org-agenda-start-on-weekday 1)
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
-    (na/org-font-setup))
+  ;;   (setq org-agenda-start-with-log-mode t)
+  ;;   (setq org-agenda-window-setup 'other-frame)    
+  ;;   (setq org-log-done 'time)
+  ;;   (setq org-log-into-drawer t)
+  ;;   (setq org-agenda-files
+  ;;         (list na/org-agenda-path))
+  ;;   (setq org-refile-targets
+  ;;         '(("archive.org" :maxlevel . 1)
+  ;;           ("task.org" :maxlevel . 1)
+  ;;           ("students.org" :maxlevel . 1)))
+  ;;   (setq org-agenda-start-on-weekday 1)
+  ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
+  ;;   (na/org-font-setup))
+
+  (use-package org)
 #+end_src
 ** Org-superstar
 #+begin_src emacs-lisp
@@ -312,16 +308,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 #+end_src
-** Visual-fill-column
-#+begin_src emacs-lisp
-(defun na/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
 
-(use-package visual-fill-column
-  :hook (org-mode . na/org-mode-visual-fill))
-#+end_src
 ** Jupyter export
 Enables export from org-mode to Jupyter. Package need to be manually downloaded from https://github.com/zaeph/ox-ipynb.  
 #+begin_src emacs-lisp
@@ -453,7 +440,9 @@ Enable org mode to automatically write source blocks to the correct config file 
   (prefer-coding-system 'utf-8-unix)
   (setq coding-system-for-read 'utf-8-unix)
   (setq coding-system-for-write 'utf-8-unix)
+  (set-clipboard-coding-system 'utf-8)
 #+end_src
+
 ** Backup files
 #+begin_src emacs-lisp
   (setq backup-directory-alist
