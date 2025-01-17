@@ -225,8 +225,9 @@ Enable line numbers globally but disable for certain modes.
 
 ** Theme settings
 #+begin_src emacs-lisp
-  (load-theme 'modus-operandi)
-#+End_src
+  (use-package tao-theme)
+  (load-theme 'tao-yin t)
+#+end_src
 
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
