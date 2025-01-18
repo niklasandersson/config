@@ -231,16 +231,18 @@ Enable line numbers globally but disable for certain modes.
 
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
-#+begin_src emacs-lisp
 
+#+begin_src emacs-lisp
   (defvar na/default-font-size 120)
 
-  (set-face-attribute 'default nil :family "Fira Code Retina" :height na/default-font-size)
+  (set-face-attribute 'default nil :family "Monaspace Neon" :height na/default-font-size)
+  (set-face-attribute 'fixed-pitch nil :family "Monaspace Neon" :height na/default-font-size)
+  (set-face-attribute 'variable-pitch nil :family "Monaspace Xenon" :height na/default-font-size :weight 'regular)
 
-  (set-face-attribute 'fixed-pitch nil :family "Fira Code Retina" :height na/default-font-size)
-
-  (set-face-attribute 'variable-pitch nil :family "Cantarell" :height na/default-font-size :weight 'regular)
-
+  (set-face-attribute 'font-lock-comment-face nil :family "Monaspace Radon" :height na/default-font-size :foreground "gray23")  
+  (set-face-attribute font-lock-doc-face nil :family "Monaspace Xenon" :height na/default-font-size :foreground "gray23")
+  (set-face-attribute font-lock-doc-markup-face nil :family "Monaspace Xenon" :height na/default-font-size :foreground "gray23")
+  (set-face-attribute 'font-lock-function-name-face nil :box nil)  
 #+end_src
 
 * Org-mode
