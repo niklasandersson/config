@@ -201,12 +201,15 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 #+end_src
 ** visual-fill-column-mode
 #+begin_src emacs-lisp
-  (use-package visual-fill-column)
-  
-  (setq display-fill-column-indicator-column 94)
-  (set-fill-column 100)
-  (global-visual-fill-column-mode)
+(setq-default fill-column 100)
+  (use-package visual-fill-column
+     :hook ((prog-mode . visual-line-fill-column-mode)
+            (text-mode . visual-line-fill-column-mode)))
+
+   (setq-default display-fill-column-indicator-column 94)
+   (global-display-fill-column-indicator-mode t)
 #+end_src
+
 * Basic GUI configuration
 ** The basics
 Remove all unwanted GUI Elements.
@@ -227,6 +230,8 @@ Enable line numbers globally but disable for certain modes.
   (set-fringe-mode 10)
 
   (column-number-mode)
+  (setq display-line-numbers-type 'relative)
+  (setq display-line-numbers-width 4)
   (global-display-line-numbers-mode t)
 #+end_src
 
@@ -252,8 +257,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (set-face-attribute 'font-lock-function-name-face nil :box nil)  
 #+end_src
 
-* Org-mode
-** Setup org-mode
+** Calendar
 #+begin_src emacs-lisp
   (setq calendar-week-start-day 1)
   (setq window-combination-resize t
@@ -276,26 +280,42 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (setq calendar-intermonth-header
         (propertize "Wk"               
                     'font-lock-face 'calendar-iso-week-header-face))
-
+#+end_src
+* Org-mode
+** Setup org-mode
+*** Org-mode setup
+#+begin_src emacs-lisp
   (defun na/org-mode-setup ()
+    (setq org-ellipsis " ▾")
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+
+    (setq org-refile-targets
+          '(("archive.org" :maxlevel . 1)
+            ("task.org" :maxlevel . 1)
+            ("students.org" :maxlevel . 1)))
+
+    (advice-add 'org-refile :after 'org-save-all-org-buffers))
+#+end_src
+*** Org-mode hook
+#+begin_src emacs-lisp
+  (defun na/org-mode-hook ()
     (org-indent-mode)
-    (variable-pitch-mode 1)
-    (visual-line-mode 1))
+    (variable-pitch-mode 1))
+#+end_src
 
+*** Org-mode font setup
+#+begin_src emacs-lisp
   (defun na/org-font-setup ()
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
     (dolist (face '((org-level-1 . 1.2)
                     (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
+                    (org-level-3 . 1.0)
                     (org-level-4 . 1.0)
                     (org-level-5 . 1.0)
                     (org-level-6 . 1.0)
                     (org-level-7 . 1.0)
                     (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil :family "Fira Code Retina" :weight 'regular :height (cdr face)))
+      (set-face-attribute (car face) nil :family "Monaspace Xenon" :weight 'bold :box nil :height (cdr face)))
 
     (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
@@ -303,29 +323,30 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
-
-  ;; (use-package org
-  ;;   :hook (org-mode . na/org-mode-setup)
-  ;;   :config
-  ;;   (setq org-ellipsis " ▾")
-
-  ;;   (setq org-agenda-start-with-log-mode t)
-  ;;   (setq org-agenda-window-setup 'other-frame)    
-  ;;   (setq org-log-done 'time)
-  ;;   (setq org-log-into-drawer t)
-  ;;   (setq org-agenda-files
-  ;;         (list na/org-agenda-path))
-  ;;   (setq org-refile-targets
-  ;;         '(("archive.org" :maxlevel . 1)
-  ;;           ("task.org" :maxlevel . 1)
-  ;;           ("students.org" :maxlevel . 1)))
-  ;;   (setq org-agenda-start-on-weekday 1)
-  ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
-  ;;   (na/org-font-setup))
-
-  (use-package org)
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "gray15" :extend t :box '(:style released-button))
+    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "gray15" :extend t :box '(:style released-button)))
 #+end_src
+
+*** Org-mode agenda setup
+#+begin_src emacs-lisp
+  (defun na/org-agenda-setup ()
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-agenda-window-setup 'other-frame)
+    (setq org-agenda-files (list na/org-agenda-path))
+    (setq org-agenda-start-on-weekday 1))
+#+end_src
+
+*** Load org-mode
+#+begin_src emacs-lisp
+  (use-package org
+    :hook (org-mode . na/org-mode-hook)
+    :config
+    (na/org-mode-setup)
+    (na/org-font-setup)
+    (na/org-agenda-setup))
+#+end_src
+
 ** Org-superstar
 #+begin_src emacs-lisp
   (use-package org-superstar
@@ -338,7 +359,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-superstar-leading nil :height 1.0))
 
   (setq org-superstar-headline-bullets-list
-        '("#" ("❱") "↪" "•"))
+        '("#" ("↪") "•"))
 
   (setq org-superstar-cycle-headline-bullets nil)
 
