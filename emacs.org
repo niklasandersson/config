@@ -174,11 +174,13 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 ** Magit
 #+begin_src emacs-lisp
   (use-package magit)
-  
-  (defun spell-en ()
-    (ispell-change-dictionary "en"))
-  
-  (add-hook 'git-commit-setup-hook 'spell-en)
+
+  (defun na/setup-commit-message ()
+    (ispell-change-dictionary "en")
+    (setq fill-column 70)
+    (setq display-fill-column-indicator-column 64))
+
+  (add-hook 'git-commit-setup-hook 'na/setup-commit-message)
 #+end_src
 ** gptel
 #+begin_src emacs-lisp
