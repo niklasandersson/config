@@ -231,7 +231,7 @@ Enable line numbers globally but disable for certain modes.
 
   (column-number-mode)
   (setq display-line-numbers-type 'relative)
-  (setq display-line-numbers-width 4)
+  (setq-default display-line-numbers-width 4)
   (global-display-line-numbers-mode t)
 #+end_src
 
