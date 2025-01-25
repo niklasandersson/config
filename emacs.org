@@ -211,7 +211,13 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
    (setq-default display-fill-column-indicator-column 94)
    (global-display-fill-column-indicator-mode t)
 #+end_src
-
+** Company-mode
+#+begin_src emacs-lisp
+  (use-package company
+    :config
+    (setq company-minimum-prefix-length 1)
+    (setq company-idle-delay 0.0))
+#+end_src
 * Basic GUI configuration
 ** The basics
 Remove all unwanted GUI Elements.
