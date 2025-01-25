@@ -51,6 +51,17 @@
   ;; put the point in the lowest line and return
   (next-line arg))
 #+end_src
+* Development
+** LSP-mode
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-l")
+  :hook (
+         (rust-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+#+end_src
 * Packages
 ** Initialize packages and package archives
 Add all archives and make sure use-package is enabled.
