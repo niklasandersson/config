@@ -199,7 +199,11 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
   (use-package ox-reveal)
   (setq org-reveal-root na/org-reveal-path)
 #+end_src
-
+** visual-fill-column-mode
+#+begin_src emacs-lisp
+  (use-package visual-fill-column)
+  (global-visual-fill-column-mode)
+#+end_src
 * Basic GUI configuration
 ** The basics
 Remove all unwanted GUI Elements.
