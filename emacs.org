@@ -202,6 +202,9 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 ** visual-fill-column-mode
 #+begin_src emacs-lisp
   (use-package visual-fill-column)
+  
+  (setq display-fill-column-indicator-column 94)
+  (set-fill-column 100)
   (global-visual-fill-column-mode)
 #+end_src
 * Basic GUI configuration
