@@ -218,13 +218,14 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 #+end_src
 ** visual-fill-column-mode
 #+begin_src emacs-lisp
-(setq-default fill-column 100)
+  (setq-default fill-column 100)
   (use-package visual-fill-column
-     :hook ((prog-mode . visual-line-fill-column-mode)
-            (text-mode . visual-line-fill-column-mode)))
+    :hook ((prog-mode . visual-line-fill-column-mode)
+           (text-mode . visual-line-fill-column-mode)))
 
-   (setq-default display-fill-column-indicator-column 94)
-   (global-display-fill-column-indicator-mode t)
+  (setq-default display-fill-column-indicator-column 94)
+  (set-face-attribute 'fill-column-indicator nil :foreground "gray23")
+  (global-display-fill-column-indicator-mode t)
 #+end_src
 ** Company-mode
 #+begin_src emacs-lisp
