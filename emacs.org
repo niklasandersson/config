@@ -356,7 +356,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 #+begin_src emacs-lisp
   (defun na/org-agenda-setup ()
     (setq org-agenda-start-with-log-mode t)
-    (setq org-agenda-window-setup 'other-frame)
+    (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-files (list na/org-agenda-path))
     (setq org-agenda-start-on-weekday 1))
 #+end_src
