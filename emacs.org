@@ -520,4 +520,8 @@ Enable org mode to automatically write source blocks to the correct config file 
   (define-key na/keymap-mode-map (kbd "C-c l") 'ispell-change-dictionary)
   (define-key na/keymap-mode-map (kbd "C-c a") 'org-agenda)
   (define-key na/keymap-mode-map (kbd "C-c d") 'duplicate-line)
+  (define-key na/keymap-mode-map (kbd "C-c <left>") 'windmove-left)
+  (define-key na/keymap-mode-map (kbd "C-c <right>") 'windmove-right)
+  (define-key na/keymap-mode-map (kbd "C-c <up>") 'windmove-up)
+  (define-key na/keymap-mode-map (kbd "C-c <down>") 'windmove-down)
 #+end_src
