@@ -69,7 +69,14 @@
 #+end_src
 ** Python
 #+begin_src emacs-lisp
-(use-package pyvenv)
+  (use-package pyvenv)
+
+  (use-package lsp-pyright
+    :ensure t
+    :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp))))  ; or lsp-deferred
 #+end_src
 * Packages
 ** Initialize packages and package archives
