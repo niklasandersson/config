@@ -273,8 +273,10 @@ Enable line numbers globally but disable for certain modes.
 
 ** Theme settings
 #+begin_src emacs-lisp
-  (use-package tao-theme)
-  (load-theme 'tao-yin t)
+  (use-package catppuccin-theme)
+  (load-theme 'catppuccin :no-confirm)
+  (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
+  (catppuccin-reload)
 #+end_src
 
 ** Font settings
