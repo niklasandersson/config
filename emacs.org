@@ -236,7 +236,7 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
            (text-mode . visual-line-fill-column-mode)))
 
   (setq-default display-fill-column-indicator-column 94)
-  (set-face-attribute 'fill-column-indicator nil :foreground "gray23")
+  (set-face-attribute 'fill-column-indicator nil)
   (global-display-fill-column-indicator-mode t)
 #+end_src
 ** Company-mode
@@ -289,9 +289,9 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (set-face-attribute 'fixed-pitch nil :family "Monaspace Neon" :height na/default-font-size)
   (set-face-attribute 'variable-pitch nil :family "Monaspace Xenon" :height na/default-font-size :weight 'regular)
 
-  (set-face-attribute 'font-lock-comment-face nil :family "Monaspace Radon" :height na/default-font-size :foreground "gray23")  
-  (set-face-attribute font-lock-doc-face nil :family "Monaspace Xenon" :height na/default-font-size :foreground "gray23")
-  (set-face-attribute font-lock-doc-markup-face nil :family "Monaspace Xenon" :height na/default-font-size :foreground "gray23")
+ (set-face-attribute 'font-lock-comment-face nil :family "Monaspace Radon" :height na/default-font-size)  
+  (set-face-attribute font-lock-doc-face nil :family "Monaspace Xenon" :height na/default-font-size)
+  (set-face-attribute font-lock-doc-markup-face nil :family "Monaspace Xenon" :height na/default-font-size)
   (set-face-attribute 'font-lock-function-name-face nil :box nil)  
 #+end_src
 
@@ -355,15 +355,15 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
                     (org-level-8 . 1.0)))
       (set-face-attribute (car face) nil :family "Monaspace Xenon" :weight 'bold :box nil :height (cdr face)))
 
-    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block nil :foreground nil :background "#1E1E2E" :inherit 'fixed-pitch)
     (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "gray15" :extend t :box '(:style released-button))
-    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "gray15" :extend t :box '(:style released-button)))
+    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "#1E1E2E" :extend t :box '(:style released-button))
+    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "#1E1E2E" :extend t :box '(:style released-button)))
 #+end_src
 
 *** Org-mode agenda setup
