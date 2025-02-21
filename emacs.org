@@ -62,6 +62,8 @@
            (python-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
+
+  (use-package lsp-ui)
 #+end_src
 ** Rust
 #+begin_src emacs-lisp
