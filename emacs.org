@@ -275,11 +275,14 @@ Enable line numbers globally but disable for certain modes.
 
 ** Theme settings
 #+begin_src emacs-lisp
-  (use-package catppuccin-theme)
-  (load-theme 'catppuccin :no-confirm)
-  (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
-  (catppuccin-reload)
+  (use-package color-theme-sanityinc-tomorrow)
+  (load-theme 'sanityinc-tomorrow-eighties t)
+  (set-face-attribute 'line-number nil
+                      :background (face-background 'default))
+  (set-face-attribute 'fringe nil
+                      :background (face-background 'default))
 #+end_src
+
 
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
@@ -357,15 +360,15 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
                     (org-level-8 . 1.0)))
       (set-face-attribute (car face) nil :family "Monaspace Xenon" :weight 'bold :box nil :height (cdr face)))
 
-    (set-face-attribute 'org-block nil :foreground nil :background "#1E1E2E" :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block nil :foreground nil :background "#2d2d2d" :inherit 'fixed-pitch)
     (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "#1E1E2E" :extend t :box '(:style released-button))
-    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :background "#1E1E2E" :extend t :box '(:style released-button)))
+    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box '(:style released-button))
+    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box '(:style released-button)))
 #+end_src
 
 *** Org-mode agenda setup
