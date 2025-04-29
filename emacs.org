@@ -363,7 +363,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
                                     :weight 'bold
                                     :box nil
                                     :height (cdr face)
-                                    :foreground "#6699cc"))
+                                    :foreground "#eeeeee"))
 
               (set-face-attribute 'org-block nil :foreground nil :background "#2d2d2d" :inherit 'fixed-pitch)
               (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
