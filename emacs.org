@@ -275,8 +275,8 @@ Enable line numbers globally but disable for certain modes.
 
 ** Theme settings
 #+begin_src emacs-lisp
-  (use-package color-theme-sanityinc-tomorrow)
-  (load-theme 'sanityinc-tomorrow-eighties t)
+  (use-package gruvbox-theme)
+  (load-theme 'gruvbox-dark-soft t)
   (set-face-attribute 'line-number nil
                       :background (face-background 'default))
   (set-face-attribute 'fringe nil
@@ -289,15 +289,12 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 
 #+begin_src emacs-lisp
   (defvar na/default-font-size 120)
+  (defvar na/default-font-size-variable-pitch 125)
 
-  (set-face-attribute 'default nil :family "Monaspace Neon" :height na/default-font-size)
-  (set-face-attribute 'fixed-pitch nil :family "Monaspace Neon" :height na/default-font-size)
-  (set-face-attribute 'variable-pitch nil :family "Monaspace Xenon" :height na/default-font-size :weight 'regular)
+  (set-face-attribute 'default nil :family "mononoki" :height na/default-font-size)
+  (set-face-attribute 'fixed-pitch nil :family "mononoki" :height na/default-font-size)
+  (set-face-attribute 'variable-pitch nil :family "Spectral" :height na/default-font-size-variable-pitch)
 
- (set-face-attribute 'font-lock-comment-face nil :family "Monaspace Radon" :height na/default-font-size)  
-  (set-face-attribute font-lock-doc-face nil :family "Monaspace Xenon" :height na/default-font-size)
-  (set-face-attribute font-lock-doc-markup-face nil :family "Monaspace Xenon" :height na/default-font-size)
-  (set-face-attribute 'font-lock-function-name-face nil :box nil)  
 #+end_src
 
 ** Calendar
@@ -359,13 +356,13 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
                               (org-level-7 . 1.0)
                               (org-level-8 . 1.0)))
                 (set-face-attribute (car face) nil
-                                    :family "Monaspace Xenon"
+                                    :family "Spectral"
                                     :weight 'bold
                                     :box nil
                                     :height (cdr face)
                                     :foreground "#99cc99"))
 
-              (set-face-attribute 'org-block nil :foreground nil :background "#2d2d2d" :inherit 'fixed-pitch)
+             (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
               (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
               (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
               (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
@@ -407,7 +404,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-superstar-leading nil :height 1.0))
 
   (setq org-superstar-headline-bullets-list
-        '("#" ("↪") "•"))
+        '("◤" ("•") "-"))
 
   (setq org-superstar-cycle-headline-bullets nil)
 
