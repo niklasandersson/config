@@ -346,31 +346,35 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 
 *** Org-mode font setup
 #+begin_src emacs-lisp
-            (defun na/org-font-setup ()
-              (dolist (face '((org-level-1 . 1.2)
-                              (org-level-2 . 1.1)
-                              (org-level-3 . 1.0)
-                              (org-level-4 . 1.0)
-                              (org-level-5 . 1.0)
-                              (org-level-6 . 1.0)
-                              (org-level-7 . 1.0)
-                              (org-level-8 . 1.0)))
-                (set-face-attribute (car face) nil
-                                    :family "Spectral"
-                                    :weight 'bold
-                                    :box nil
-                                    :height (cdr face)
-                                    :foreground "#99cc99"))
+      (defun na/org-font-setup ()
+        (dolist (face '((org-level-1 . 1.2)
+                        (org-level-2 . 1.1)
+                        (org-level-3 . 1.0)
+                        (org-level-4 . 1.0)
+                        (org-level-5 . 1.0)
+                        (org-level-6 . 1.0)
+                        (org-level-7 . 1.0)
+                        (org-level-8 . 1.0)))
+          (set-face-attribute (car face) nil
+                              :family "Spectral"
+                              :weight 'bold
+                              :box nil
+                              :height (cdr face)
+                              :foreground "#99cc99"))
 
-             (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-              (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-              (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
-              (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-              (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-              (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-              (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-              (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box '(:style released-button))
-              (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box '(:style released-button)))
+        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+        (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+        (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+        (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+        (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+        (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box '(:style released-button))
+        (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box '(:style released-button))
+        (set-face-attribute 'org-headline-done nil
+                        :foreground "#7c6f64")
+        (set-face-attribute 'org-done nil
+                      :foreground "#7c6f64"))
 #+end_src
 
 *** Org-mode agenda setup
