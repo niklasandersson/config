@@ -11,7 +11,6 @@
 #+begin_src emacs-lisp
   (load "~/.emacs.d/lisp/org_agenda_path.el")
   (load "~/.emacs.d/lisp/openai_api.el")
-  (load "~/.emacs.d/lisp/org_reveal_path.el")
 #+end_src
 * Custom functions
 ** Duplicate line
@@ -226,9 +225,10 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 (use-package ox-pandoc)
 #+end_src
 ** org-reveal
+org-reveal-root is set to pull Reveal.JS from CDN so no install is required.
 #+begin_src emacs-lisp
   (use-package ox-reveal)
-  (setq org-reveal-root na/org-reveal-path)
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
   (setq org-reveal-title-slide nil)
 #+end_src
 ** visual-fill-column-mode
