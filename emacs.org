@@ -3,7 +3,7 @@
 ** Home directory
 #+begin_src emacs-lisp
   (defvar na/home-directory
-    (cond ((eq system-type 'windows-nt) (format "c:/Users/%s/Personal/" user-login-name))
+    (cond ((eq system-type 'windows-nt) (format "c:/Users/%s/" user-login-name))
           (t "~/")))
 #+end_src
 
