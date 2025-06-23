@@ -479,7 +479,7 @@ Enable org mode to automatically write source blocks to the correct config file 
 #+end_src
 ** Default folder
 #+begin_src emacs-lisp
- (cd na/org-agenda-path)
+ (cd na/home-directory)
 #+end_src
 ** Text handling
 #+begin_src emacs-lisp
