@@ -176,24 +176,7 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
 #+end_src
-** Projectile
-#+begin_src emacs-lisp
 
-   (defvar na/project-directory (format "%sProjects/" na/home-directory))
-  na/project-directory
-  
-  (use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :init
-  (setq projectile-project-search-path (list na/project-directory)))
-
-  (use-package counsel-projectile
-    :config (counsel-projectile-mode))
-#+end_src
 ** Magit
 #+begin_src emacs-lisp
   (use-package magit)
