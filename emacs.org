@@ -144,11 +144,7 @@ Add all archives and make sure use-package is enabled.
 ** Which-key
 Which-key is likely soon going to be added as standard to Emacs.  
 #+begin_src emacs-lisp
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1))
+  (which-key-mode 1)
 #+end_src
 ** Rainbow-delimiters
 #+begin_src emacs-lisp
