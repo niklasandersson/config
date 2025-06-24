@@ -157,16 +157,18 @@ Which-key is likely soon going to be added as standard to Emacs.
 ** Doom-modeline
 All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install-fonts and M-x nerd-icons-install-fonts. 
 #+begin_src emacs-lisp
-(use-package all-the-icons
-  :if (display-graphic-p))
+  (use-package all-the-icons
+    :if (display-graphic-p))
 
-;; Setup doom-modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+  ;; Setup doom-modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
 
-(display-time)
-(setq display-time-24hr-format t)
+  (display-time)
+  (setq display-time-24hr-format t)
+
+  (setq doom-modeline-buffer-encoding nil)
 #+end_src
 ** Helpful
 #+begin_src emacs-lisp
