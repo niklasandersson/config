@@ -50,6 +50,10 @@
   (next-line arg))
 #+end_src
 * Development
+** Compilation
+#+begin_src emacs-lisp
+(add-hook 'compilation-finish-functions 'switch-to-buffer-other-window 'compilation)
+#+end_src
 ** LSP-mode
 #+begin_src emacs-lisp
   (use-package lsp-mode
