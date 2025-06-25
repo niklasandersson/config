@@ -524,7 +524,7 @@ Enable org mode to automatically write source blocks to the correct config file 
 
   (define-key na/keymap-mode-map (kbd "C-c g") 'magit)
   (define-key na/keymap-mode-map (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
-  (define-key na/keymap-mode-map (kbd "C-c c") 'gptel)
+  (define-key na/keymap-mode-map (kbd "C-c c") 'org-capture)
   (define-key na/keymap-mode-map (kbd "C-c l") 'ispell-change-dictionary)
   (define-key na/keymap-mode-map (kbd "C-c a") 'org-agenda)
   (define-key na/keymap-mode-map (kbd "C-c d") 'duplicate-line)
