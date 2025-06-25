@@ -251,7 +251,7 @@ Enable line numbers globally but disable for certain modes.
 ** Theme settings
 #+begin_src emacs-lisp
   (use-package gruvbox-theme)
-  (load-theme 'gruvbox-dark-soft t)
+  (load-theme 'gruvbox-dark-hard t)
   (set-face-attribute 'line-number nil
                       :background (face-background 'default))
   (set-face-attribute 'fringe nil
@@ -298,27 +298,6 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 #+end_src
 * Org-mode
 ** Setup org-mode
-*** Org-mode setup
-#+begin_src emacs-lisp
-  (defun na/org-mode-setup ()
-    (setq org-ellipsis " ▾")
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-
-    (setq org-refile-targets
-          '(("archive.org" :maxlevel . 1)
-            ("task.org" :maxlevel . 1)
-            ("students.org" :maxlevel . 1)))
-
-    (advice-add 'org-refile :after 'org-save-all-org-buffers))
-#+end_src
-*** Org-mode hook
-#+begin_src emacs-lisp
-  (defun na/org-mode-hook ()
-    (org-indent-mode)
-    (variable-pitch-mode 1))
-#+end_src
-
 *** Org-mode font setup
 #+begin_src emacs-lisp
       (defun na/org-font-setup ()
@@ -335,9 +314,9 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
                               :weight 'bold
                               :box nil
                               :height (cdr face)
-                              :foreground "#99cc99"))
+                              :foreground "#458588"))
 
-        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :background nil)
         (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
         (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
         (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
@@ -352,6 +331,28 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
                       :foreground "#7c6f64"))
 #+end_src
 
+*** Org-mode hook
+#+begin_src emacs-lisp
+    (defun na/org-mode-hook ()
+      (org-indent-mode)
+      (variable-pitch-mode 1)
+      (na/org-font-setup))
+#+end_src
+
+*** Org-mode setup
+#+begin_src emacs-lisp
+  (defun na/org-mode-setup ()
+    (setq org-ellipsis " ▾")
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+
+    (setq org-refile-targets
+          '(("archive.org" :maxlevel . 1)
+            ("task.org" :maxlevel . 1)
+            ("students.org" :maxlevel . 1)))
+
+    (advice-add 'org-refile :after 'org-save-all-org-buffers))
+#+end_src
 *** Org-mode agenda setup
 #+begin_src emacs-lisp
   (defun na/org-agenda-setup ()
@@ -367,7 +368,6 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     :hook (org-mode . na/org-mode-hook)
     :config
     (na/org-mode-setup)
-    (na/org-font-setup)
     (na/org-agenda-setup))
 #+end_src
 
