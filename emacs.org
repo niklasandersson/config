@@ -232,9 +232,10 @@ Remove all unwanted GUI Elements.
   (tool-bar-mode -1)
   (tooltip-mode -1)
   (menu-bar-mode -1)
-  
+
   (setq visible-bell t)
-  (setq ring-bell-function 'ignore) 
+  (setq ring-bell-function 'ignore)
+  (setq-default cursor-type 'bar)
 #+end_src
 
 ** Setup line numbers
