@@ -348,11 +348,11 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (setq org-log-into-drawer t)
 
     (setq org-refile-targets
-          '(("archive.org" :maxlevel . 1)
-            ("task.org" :maxlevel . 1)
-            ("students.org" :maxlevel . 1)))
+          '(("tasks.org" :maxlevel . 1)))
+    
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+    (setq org-archive-location "archive.org::datetree/"))
 
-    (advice-add 'org-refile :after 'org-save-all-org-buffers))
 #+end_src
 *** Org-mode agenda setup
 #+begin_src emacs-lisp
