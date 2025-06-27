@@ -486,7 +486,7 @@ Enable org mode to automatically write source blocks to the correct config file 
 
 ** Remove whitespaces
 #+begin_src emacs-lisp
-(add-hook 'before-save-hook #'delete-trailing-whitespace nil t)
+  (add-hook 'before-save-hook #'delete-trailing-whitespace)
 #+end_src
 ** Auto-complete brackets
 #+begin_src emacs-lisp
