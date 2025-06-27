@@ -537,6 +537,9 @@ Enable org mode to automatically write source blocks to the correct config file 
 ** Stored registers
 #+begin_src emacs-lisp
   (set-register ?e (cons 'file na/config-filename))
-  (set-register ?w (cons 'file (format "%swork.org" na/org-agenda-path)))
-  (set-register ?s '(buffer . "*scratch*"))
+  (set-register ?r '(buffer . "*scratch*"))
+  (set-register ?t (cons 'file (format "%stasks.org" na/org-agenda-path)))
+  (set-register ?m (cons 'file (format "%smeetings.org" na/org-agenda-path)))
+  (when (string-equal na/config-type "work")
+    (set-register ?s (cons 'file (format "%sstudents.org" na/org-agenda-path))))
 #+end_src
