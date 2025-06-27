@@ -9,7 +9,7 @@
 
 ** From external files
 #+begin_src emacs-lisp
-  (load "~/.emacs.d/lisp/org_agenda_path.el")
+  (load "~/.emacs.d/lisp/external_variables.el")
 #+end_src
 * Custom functions
 ** Duplicate line
