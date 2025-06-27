@@ -568,6 +568,10 @@ Enable org mode to automatically write source blocks to the correct config file 
   (set-register ?r '(buffer . "*scratch*"))
   (set-register ?t (cons 'file (format "%stasks.org" na/org-agenda-path)))
   (set-register ?m (cons 'file (format "%smeetings.org" na/org-agenda-path)))
+
+  (when (string-equal na/config-type "personal")
+    (set-register ?p (cons 'file (format "%spersonligt.org" na/org-agenda-path))))
+
   (when (string-equal na/config-type "work")
     (set-register ?s (cons 'file (format "%sstudents.org" na/org-agenda-path))))
 #+end_src
