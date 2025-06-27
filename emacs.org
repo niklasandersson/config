@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/init.el    
+#+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/init.el
 * Variables
 ** Home directory
 #+begin_src emacs-lisp
@@ -11,49 +11,52 @@
 #+begin_src emacs-lisp
   (load "~/.emacs.d/lisp/external_variables.el")
 #+end_src
+
 * Custom functions
 ** Duplicate line
 #+begin_src emacs-lisp
-(defun duplicate-line (arg)
-  "Duplicate current line, leaving point in lower line."
-  (interactive "*p")
+  (defun duplicate-line (arg)
+    "Duplicate current line, leaving point in lower line."
+    (interactive "*p")
 
-  ;; save the point for undo
-  (setq buffer-undo-list (cons (point) buffer-undo-list))
+    ;; save the point for undo
+    (setq buffer-undo-list (cons (point) buffer-undo-list))
 
-  ;; local variables for start and end of line
-  (let ((bol (save-excursion (beginning-of-line) (point)))
-        eol)
-    (save-excursion
+    ;; local variables for start and end of line
+    (let ((bol (save-excursion (beginning-of-line) (point)))
+          eol)
+      (save-excursion
 
-      ;; don't use forward-line for this, because you would have
-      ;; to check whether you are at the end of the buffer
-      (end-of-line)
-      (setq eol (point))
+        ;; don't use forward-line for this, because you would have
+        ;; to check whether you are at the end of the buffer
+        (end-of-line)
+        (setq eol (point))
 
-      ;; store the line and disable the recording of undo information
-      (let ((line (buffer-substring bol eol))
-            (buffer-undo-list t)
-            (count arg))
-        ;; insert the line arg times
-        (while (> count 0)
-          (newline)         ;; because there is no newline in 'line'
-          (insert line)
-          (setq count (1- count)))
-        )
+        ;; store the line and disable the recording of undo information
+        (let ((line (buffer-substring bol eol))
+              (buffer-undo-list t)
+              (count arg))
+          ;; insert the line arg times
+          (while (> count 0)
+            (newline)         ;; because there is no newline in 'line'
+            (insert line)
+            (setq count (1- count)))
+          )
 
-      ;; create the undo information
-      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
-    ) ; end-of-let
+        ;; create the undo information
+        (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
+      ) ; end-of-let
 
-  ;; put the point in the lowest line and return
-  (next-line arg))
+    ;; put the point in the lowest line and return
+    (next-line arg))
 #+end_src
+
 * Development
 ** Compilation
 #+begin_src emacs-lisp
-(add-hook 'compilation-finish-functions 'switch-to-buffer-other-window 'compilation)
+  (add-hook 'compilation-finish-functions 'switch-to-buffer-other-window 'compilation)
 #+end_src
+
 ** LSP-mode
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -67,10 +70,12 @@
 
   (use-package lsp-ui)
 #+end_src
+
 ** Rust
 #+begin_src emacs-lisp
-(use-package rustic)
+  (use-package rustic)
 #+end_src
+
 ** Python
 #+begin_src emacs-lisp
   (use-package pyvenv)
@@ -82,31 +87,29 @@
                            (require 'lsp-pyright)
                            (lsp))))  ; or lsp-deferred
 #+end_src
+
 * Packages
 ** Initialize packages and package archives
 Add all archives and make sure use-package is enabled.
 #+begin_src emacs-lisp
-    (require 'package)
+  (require 'package)
 
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                             ("org" . "https://orgmode.org/elpa/")
-                             ("elpa" . "https://elpa.gnu.org/packages/")
-                               ( "jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/")
-                               ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")
+                           ( "jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/")
+                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
-    (package-initialize)
-    (unless package-archive-contents
-      (package-refresh-contents))
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
 
-    (unless (package-installed-p 'use-package)
-       (package-install 'use-package))
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
 
-    (require 'use-package)
-    (setq use-package-always-ensure t)
+  (require 'use-package)
+  (setq use-package-always-ensure t)
 #+end_src
-
-#+RESULTS:
-: t
 
 ** Ivy and counsel
 #+begin_src emacs-lisp
@@ -139,23 +142,26 @@ Add all archives and make sure use-package is enabled.
     (setq ivy-initial-inputs-alist nil))
 
   (use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
+    :init
+    (ivy-rich-mode 1))
 
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)  
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 #+end_src
+
 ** Which-key
-Which-key is likely soon going to be added as standard to Emacs.  
+Which-key is likely soon going to be added as standard to Emacs.
 #+begin_src emacs-lisp
   (which-key-mode 1)
 #+end_src
+
 ** Rainbow-delimiters
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
+
 ** Doom-modeline
-All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install-fonts and M-x nerd-icons-install-fonts. 
+All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install-fonts and M-x nerd-icons-install-fonts.
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p))
@@ -168,17 +174,18 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
   (setq doom-modeline-position-line-format nil)
   (setq doom-modeline-position-column-format nil)
 #+end_src
+
 ** Helpful
 #+begin_src emacs-lisp
-(use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
 #+end_src
 
 ** Magit
@@ -192,12 +199,14 @@ All the icon is used for doom-modeline. On first time install run M-x all-the-ic
 
   (add-hook 'git-commit-setup-hook 'na/setup-commit-message)
 #+end_src
+
 ** ox-pandoc
 *** Dependencies
 **** Pandoc
 #+begin_src emacs-lisp
-(use-package ox-pandoc)
+  (use-package ox-pandoc)
 #+end_src
+
 ** org-reveal
 org-reveal-root is set to pull Reveal.JS from CDN so no install is required.
 #+begin_src emacs-lisp
@@ -205,6 +214,7 @@ org-reveal-root is set to pull Reveal.JS from CDN so no install is required.
   (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
   (setq org-reveal-title-slide nil)
 #+end_src
+
 ** visual-fill-column-mode
 #+begin_src emacs-lisp
   (setq-default fill-column 100)
@@ -216,6 +226,7 @@ org-reveal-root is set to pull Reveal.JS from CDN so no install is required.
   (set-face-attribute 'fill-column-indicator nil)
   (global-display-fill-column-indicator-mode t)
 #+end_src
+
 ** Company-mode
 #+begin_src emacs-lisp
   (use-package company
@@ -223,6 +234,7 @@ org-reveal-root is set to pull Reveal.JS from CDN so no install is required.
     (setq company-minimum-prefix-length 1)
     (setq company-idle-delay 0.0))
 #+end_src
+
 * Basic GUI configuration
 ** The basics
 Remove all unwanted GUI Elements.
@@ -239,7 +251,7 @@ Remove all unwanted GUI Elements.
 #+end_src
 
 ** Setup line numbers
-Enable line numbers globally but disable for certain modes. 
+Enable line numbers globally but disable for certain modes.
 #+begin_src emacs-lisp
   (set-fringe-mode 10)
 
@@ -258,7 +270,6 @@ Enable line numbers globally but disable for certain modes.
   (set-face-attribute 'fringe nil
                       :background (face-background 'default))
 #+end_src
-
 
 ** Font settings
 Set default fonts as well as fonts for fixed pitch and variable pitch.
@@ -294,50 +305,51 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (set-face-attribute 'calendar-iso-week-header-face nil
                       :height 0.7)
   (setq calendar-intermonth-header
-        (propertize "Wk"               
+        (propertize "Wk"
                     'font-lock-face 'calendar-iso-week-header-face))
 #+end_src
+
 * Org-mode
 ** Setup org-mode
 *** Org-mode font setup
 #+begin_src emacs-lisp
-      (defun na/org-font-setup ()
-        (dolist (face '((org-level-1 . 1.2)
-                        (org-level-2 . 1.1)
-                        (org-level-3 . 1.0)
-                        (org-level-4 . 1.0)
-                        (org-level-5 . 1.0)
-                        (org-level-6 . 1.0)
-                        (org-level-7 . 1.0)
-                        (org-level-8 . 1.0)))
-          (set-face-attribute (car face) nil
-                              :family "Spectral"
-                              :weight 'bold
-                              :box nil
-                              :height (cdr face)
-                              :foreground "#458588"))
+  (defun na/org-font-setup ()
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.0)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil
+                          :family "Spectral"
+                          :weight 'bold
+                          :box nil
+                          :height (cdr face)
+                          :foreground "#458588"))
 
-        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :background nil)
-        (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-        (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
-        (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-        (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-        (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-        (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-        (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box nil :background nil)
-        (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box nil :background nil)
-        (set-face-attribute 'org-headline-done nil
+    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :background nil)
+    (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box nil :background nil)
+    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box nil :background nil)
+    (set-face-attribute 'org-headline-done nil
                         :foreground "#7c6f64")
-        (set-face-attribute 'org-done nil
-                      :foreground "#7c6f64"))
+    (set-face-attribute 'org-done nil
+                        :foreground "#7c6f64"))
 #+end_src
 
 *** Org-mode hook
 #+begin_src emacs-lisp
-    (defun na/org-mode-hook ()
-      (org-indent-mode)
-      (variable-pitch-mode 1)
-      (na/org-font-setup))
+  (defun na/org-mode-hook ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (na/org-font-setup))
 #+end_src
 
 *** Org-mode setup
@@ -349,11 +361,12 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 
     (setq org-refile-targets
           '(("tasks.org" :maxlevel . 1)))
-    
+
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
     (setq org-archive-location "archive.org::datetree/"))
 
 #+end_src
+
 *** Org-mode agenda setup
 #+begin_src emacs-lisp
   (defun na/org-agenda-setup ()
@@ -395,27 +408,30 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (setq org-indent-mode-turns-on-hiding-stars nil)
 
 #+end_src
+
 ** Org-babel
 #+begin_src emacs-lisp
-(org-babel-do-load-languages
-  'org-babel-load-languages
-  '((emacs-lisp . t)
-    (python . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (python . t)))
 
-(setq org-confirm-babel-evaluate nil)
+  (setq org-confirm-babel-evaluate nil)
 
-(require 'org-tempo)
+  (require 'org-tempo)
+
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+
   (defun na/indent-org-block-on-save ()
     (when (org-in-src-block-p)
       (org-indent-block)))
 
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-hook 'org-mode-hook (lambda () (add-hook 'before-save-hook #'na/indent-org-block-on-save)))
 #+end_src
 
 ** Jupyter export
-Enables export from org-mode to Jupyter. Package need to be manually downloaded from https://github.com/zaeph/ox-ipynb.  
+Enables export from org-mode to Jupyter. Package need to be manually downloaded from https://github.com/zaeph/ox-ipynb.
 #+begin_src emacs-lisp
   (use-package ox-ipynb
     :load-path "~/.emacs.d/lisp/")
@@ -435,12 +451,13 @@ Enable org mode to automatically write source blocks to the correct config file 
   (defun na/org-babel-tangle-config ()
     (when (string-equal (buffer-file-name)
                         (expand-file-name na/config-filename))
-           ;; Dynamic scoping to the rescue
-           (let ((org-confirm-babel-evaluate nil))
-             (org-babel-tangle))))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'na/org-babel-tangle-config)))
 #+end_src
+
 * Behavior settings
 ** Locale and character encoding
 #+begin_src emacs-lisp
@@ -450,20 +467,23 @@ Enable org mode to automatically write source blocks to the correct config file 
   (set-terminal-coding-system 'utf-8)
   (set-selection-coding-system
    (if (eq system-type 'windows-nt)
-       'utf-16-le 
+       'utf-16-le
      'utf-8))
   (prefer-coding-system 'utf-8)
 
   (setq system-time-locale "C")
 #+end_src
+
 ** Default folder
 #+begin_src emacs-lisp
- (cd na/home-directory)
+  (cd na/home-directory)
 #+end_src
+
 ** Text handling
 #+begin_src emacs-lisp
-(delete-selection-mode 1)
+  (delete-selection-mode 1)
 #+end_src
+
 ** Spell-checking
 #+begin_src emacs-lisp
   (when (string-equal system-type "windows-nt")
@@ -492,15 +512,16 @@ Enable org mode to automatically write source blocks to the correct config file 
 #+begin_src emacs-lisp
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 #+end_src
+
 ** Auto-complete brackets
 #+begin_src emacs-lisp
-(electric-pair-mode 1)
-(add-hook 'org-mode-hook (lambda ()
-           (setq-local electric-pair-inhibit-predicate
-                   `(lambda (c)
-                  (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+  (electric-pair-mode 1)
+  (add-hook 'org-mode-hook (lambda ()
+  			   (setq-local electric-pair-inhibit-predicate
+  				       `(lambda (c)
+  					  (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
 
-(show-paren-mode 1)
+  (show-paren-mode 1)
 #+end_src
 
 ** Backup files
@@ -510,11 +531,13 @@ Enable org mode to automatically write source blocks to the correct config file 
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
 #+end_src
+
 ** Set custom file
 #+begin_src emacs-lisp
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file)
+  (setq custom-file "~/.emacs.d/emacs-custom.el")
+  (load custom-file)
 #+end_src
+
 ** Custom keybindings
 #+begin_src emacs-lisp
   (define-minor-mode na/keymap-mode
@@ -538,6 +561,7 @@ Enable org mode to automatically write source blocks to the correct config file 
   (define-key na/keymap-mode-map (kbd "C-c <up>") 'windmove-up)
   (define-key na/keymap-mode-map (kbd "C-c <down>") 'windmove-down)
 #+end_src
+
 ** Stored registers
 #+begin_src emacs-lisp
   (set-register ?e (cons 'file na/config-filename))
