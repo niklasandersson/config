@@ -405,9 +405,13 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
 (setq org-confirm-babel-evaluate nil)
 
 (require 'org-tempo)
+  (defun na/indent-org-block-on-save ()
+    (when (org-in-src-block-p)
+      (org-indent-block)))
 
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'before-save-hook #'na/indent-org-block-on-save)))
 #+end_src
 
 ** Jupyter export
