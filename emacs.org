@@ -426,7 +426,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (when (org-in-src-block-p)
       (org-indent-block)))
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'before-save-hook #'na/indent-org-block-on-save)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'before-save-hook #'na/indent-org-block-on-save nil t)))
 #+end_src
 
 ** Jupyter export
@@ -454,8 +454,7 @@ Enable org mode to automatically write source blocks to the correct config file 
       (let ((org-confirm-babel-evaluate nil))
         (org-babel-tangle))))
 
-  (add-hook 'org-mode-hook
-  	  (lambda () (add-hook 'before-save-hook #'na/indent-org-block-on-save nil t)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'na/org-babel-tangle-config)))
 #+end_src
 
 * Behavior settings
