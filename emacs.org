@@ -397,7 +397,7 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
     (set-face-attribute 'org-superstar-leading nil :height 1.0))
 
   (setq org-superstar-headline-bullets-list
-        '("◤" ("•") "-"))
+        '("◤" "◆" "■" "□"))
 
   (setq org-superstar-cycle-headline-bullets nil)
 
@@ -406,7 +406,6 @@ Set default fonts as well as fonts for fixed pitch and variable pitch.
   (setq org-hide-leading-stars nil)
   (setq org-superstar-leading-bullet ?\s)
   (setq org-indent-mode-turns-on-hiding-stars nil)
-
 #+end_src
 
 ** Org-babel
