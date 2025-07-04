@@ -527,7 +527,7 @@ Obviously we use =magit= to manage git from within Emacs.
   - Enable auto-fill-mode for line wrapping"
     (ispell-change-dictionary "en")
     (setq-local fill-column 72)
-    (setq-local display-fill-column-indicator-column 72)
+    (setq-local display-fill-column-indicator-column 50)
     (display-fill-column-indicator-mode 1)
     (auto-fill-mode 1))
 
