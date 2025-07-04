@@ -508,6 +508,14 @@ presentations that run i a web browser. ox-reveal allows us to export org-files 
 #+end_src
 
 * Development
+** Appearance
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure t
+    :defer t
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
 ** Git
 Obviously we use =magit= to manage git from within Emacs.
 #+begin_src emacs-lisp
