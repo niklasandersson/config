@@ -1,19 +1,529 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/init.el
-* Variables
-** Home directory
+* Setup Instructions
+** Additional Icons
+*** Linux
+- Run the following command once in Emacs: =M-x nerd-icons-install-fonts=.
+- This will download and install several Nerd Fonts into '~/.local/share/fonts/'.
+- If the fonts do not show up immediately, you may need to refresh the system font cache. In a
+  terminal, run: =fc-cache -fv=.
+- Restart Emacs and your system if necessary.
+
+*** Windows
+- Run the following command once in Emacs: =M-x nerd-icons-install-fonts=.
+- After that, open the following folder in Windows Explorer:
+  =C:\Users\<YourUsername>\.emacs.d\.local\share\fonts=.
+- Select all .ttf files and press “Install” or “Install for all users”.
+- Once installed, restart Emacs to see the icons displayed correctly.
+
+** Spell Check
+Follow these steps to install and configure Aspell so that Emacs can use it for spell checking
+with Flyspell.
+*** Linux
+Use your system's package manager to install aspell and the dictionaries you need (aspell-en, aspell-sv).
+
+*** Windows
+- Download and install MSYS2 from the official website: [[https://www.msys2.org/][msys2.org]]. Make sure to follow the
+  installation and update instructions on their site  (run pacman -Syu after installation).
+- Open the MSYS2 MSYS terminal (not MinGW), and install Aspell and make by running:
+  =pacman -S aspell make=.
+- Visit the GNU Aspell dictionary download page:
+  [[https://ftp.gnu.org/gnu/aspell/dict/0index.html#0.60]] and download required dictionaries.
+- Extract the downloaded .tar.bz2 file to a folder in MSYS2.
+- Open an MSYS2 terminal, cd into the unpacked dictionary folder, and run:
+  #+begin_src sh
+    ./configure
+    make
+    make install
+  #+end_src
+- Make sure the variables =my/ispell-program-name=, =my/ispell-aspell-data-dir= and
+  =my/ispell-aspell-dict-dir= are set correctly (externally loaded).
+
+* Global Variables
+We declare and define all globally used variables here so we are sure that they are available
+throughout the config.
 #+begin_src emacs-lisp
-  (defvar na/home-directory
+  (defvar my/home-directory
     (cond ((eq system-type 'windows-nt) (format "c:/Users/%s/" user-login-name))
           (t "~/")))
+
+  (defvar my/default-font-size 120)
+  (defvar my/default-font-size-variable-pitch 125)
+
+  (defvar my/config-filename
+    (format "%sProjects/Emacs-Configuration/emacs.org" my/home-directory))
 #+end_src
 
-** From external files
+Some variables are system specific or to sensitive to keep in version control so we load them from an
+external file.
 #+begin_src emacs-lisp
   (load "~/.emacs.d/lisp/external_variables.el")
 #+end_src
 
-* Custom functions
-** Duplicate line
+* Default Behaviour
+** Setup Packages
+Here we add all archives that we install packages from and make sure that =use-package= is available.
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")
+                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+#+end_src
+
+** Character Encoding
+Ensure consistent UTF-8 encoding across Emacs, including files, terminal, clipboard, and internal
+operations. Use "C" locale to avoid localized weekday/month names in timestamps.
+#+begin_src emacs-lisp
+  (set-language-environment 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-selection-coding-system
+   (if (eq system-type 'windows-nt)
+       'utf-16-le
+     'utf-8))
+  (prefer-coding-system 'utf-8)
+
+  (setq system-time-locale "C")
+#+end_src
+
+** Starting Directory
+Make Emacs start in the users home directory.
+#+begin_src emacs-lisp
+  (cd my/home-directory)
+#+end_src
+
+** Custom File
+Set default location of file used for storing customization information.
+#+begin_src emacs-lisp
+  (setq custom-file "~/.emacs.d/emacs-custom.el")
+  (load custom-file)
+#+end_src
+
+** Backup Files
+Set default locations for backup files.
+#+begin_src emacs-lisp
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+#+end_src
+
+** Text Handling
+Enable all text handling features that should be default for all buffers.
+#+begin_src emacs-lisp
+  (delete-selection-mode 1)
+  (electric-pair-mode 1)
+  (show-paren-mode 1)
+  (add-hook 'before-save-hook #'delete-trailing-whitespace)
+#+end_src
+
+** Navigation and Minibuffer Completion
+In this section we configure Ivy, Counsel, and Ivy-Rich to replace Emacs'
+default interface for executing commands, opening files, switching buffers, and searching text.
+#+begin_src emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish
+    :defer 0
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done))
+
+    :custom
+    (ivy-initial-inputs-alist nil)
+
+    :config
+    (ivy-mode 1)
+    (setcdr (assq t ivy-format-functions-alist)
+            #'ivy-format-function-line))
+
+  (use-package counsel
+    :ensure t
+    :after ivy
+    :defer 0
+    :bind (("M-x"     . counsel-M-x)
+           ("C-x b"   . counsel-ibuffer)
+           ("C-x C-f" . counsel-find-file)))
+
+  (use-package ivy-rich
+    :ensure t
+    :after ivy
+    :config
+    (ivy-rich-mode 1))
+
+  (use-package which-key
+    :ensure t
+    :diminish
+    :defer 0
+    :config
+    (which-key-mode 1))
+#+end_src
+
+** Help System
+This section replaces and extends the help system with the helpful package which provides more
+informative and interactive help buffers.
+#+begin_src emacs-lisp
+  (use-package helpful
+    :ensure t
+    :defer t
+    :after counsel
+
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key)
+
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable))
+#+end_src
+
+** Spell Check
+This code enables automatic spell checking in selected modes. Setup is a bit tricky on Windows and
+requires an MSYS2 installation for access to aspell.
+#+begin_src emacs-lisp
+  (when (eq system-type 'windows-nt)
+    (setq ispell-program-name my/ispell-program-name)
+    (setq ispell-aspell-data-dir my/ispell-aspell-data-dir)
+    (setq ispell-aspell-dict-dir my/ispell-aspell-dict-dir))
+
+  (setq ispell-local-dictionary "sv")
+
+  (use-package flyspell
+    :hook ((org-mode . flyspell-mode)
+  	 (git-commit-setup . git-commit-turn-on-flyspell))
+    :custom
+    (flyspell-issue-message-flag nil))
+#+end_src
+* GUI Configuration
+** Basic GUI elements
+Emacs has a lot of unwanted GUI elements that we need to disable.
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+  (setq visible-bell t)
+  (setq ring-bell-function 'ignore)
+#+end_src
+
+We also need to configure some basic GUI elements that we want to apply for all buffers.
+#+begin_src emacs-lisp
+  (setq-default cursor-type 'bar)
+  (set-fringe-mode 10)
+  (setq-default display-line-numbers-width 4)
+#+end_src
+
+** Theme
+Enable a nice looking theme. Some themes have an contrasting background color for the fringes.
+We set the fringe and line number backgrounds to the default background so that they blend in with the rest of the frame.
+#+begin_src emacs-lisp
+  (use-package gruvbox-theme :ensure t)
+  (load-theme 'gruvbox-dark-hard t)
+  (set-face-attribute 'line-number nil
+                      :background (face-background 'default))
+  (set-face-attribute 'fringe nil
+                      :background (face-background 'default))
+#+end_src
+
+** Fonts
+We set one fixed-width and one variable-width font to be used in different modes. Modes like
+org-mode will use both.
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil
+  		    :family "mononoki"
+  		    :height my/default-font-size)
+  (set-face-attribute 'fixed-pitch nil
+  		    :family "mononoki"
+  		    :height my/default-font-size)
+  (set-face-attribute 'variable-pitch nil
+  		    :family "Spectral"
+  		    :height my/default-font-size-variable-pitch)
+#+end_src
+
+** Additional Icons
+Some packages, such as doom-modeline, uses additional icons for certain elements. We make them
+available trough the package =nerd-icons=.
+#+begin_src emacs-lisp
+  (use-package nerd-icons :ensure t)
+#+end_src
+
+** Mode Line
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :defer 0
+
+    :custom
+    (doom-modeline-buffer-encoding nil)
+    (doom-modeline-position-line-format nil)
+    (doom-modeline-position-column-format nil)
+
+    :config (doom-modeline-mode 1))
+#+end_src
+
+** Calendar
+We make sure that Monday is the first day of the week in the calendar by setting
+=calendar-week-start-day= to 1.
+#+begin_src emacs-lisp
+  (setq calendar-week-start-day 1)
+#+end_src
+
+Here we add week numbers to the calendar view.
+*Credit:* Tommy
+*Source:* [[https://stackoverflow.com/questions/21364948/how-to-align-the-calendar-with-week-number-as-the-intermonth-text][Stack Overflow]]
+#+begin_src emacs-lisp
+  (copy-face font-lock-constant-face 'calendar-iso-week-face)
+  (set-face-attribute 'calendar-iso-week-face nil :height 0.7)
+
+  (setq calendar-intermonth-text
+        '(propertize
+  	(format "%2d" (car (calendar-iso-from-absolute
+  			    (calendar-absolute-from-gregorian
+  			     (list month day year)))))
+  	'font-lock-face 'calendar-iso-week-face))
+
+  (copy-face 'default 'calendar-iso-week-header-face)
+  (set-face-attribute 'calendar-iso-week-header-face nil :height 0.7)
+
+  (setq calendar-intermonth-header
+        (propertize "Wk" 'font-lock-face 'calendar-iso-week-header-face))
+#+end_src
+
+* Writing
+** Page Layout
+We want the line length to be limited to 80 characters when in a text
+mode. =auto-fill-mode= ensures that Emacs automatically breaks lines over this
+limit. =olivetti-mode= is used to center the page in the window.
+#+begin_src emacs-lisp
+  (defun my/text-mode-setup ()
+    "Set `fill-column` to 80 and enable automatic line breaking in text buffers."
+    (setq-local fill-column 80)
+    (auto-fill-mode 1))
+
+  (add-hook 'text-mode-hook #'my/text-mode-setup)
+
+  (use-package olivetti
+    :ensure t
+    :defer t
+    :hook (text-mode . olivetti-mode))
+#+end_src
+** Org Mode
+Org-mode has a lot of options to configure. We separate the config into multiple
+functions that we can call as hooks to org-mode. First we define our font setup for org-mode.
+#+begin_src emacs-lisp
+  (defun my/org-font-setup ()
+    "Customize Org mode font faces for improved readability.
+
+    Sets custom fonts, sizes, and styles for Org headings and fixed-pitch
+    elements. Headings from level 1 to 8 are displayed in the 'Spectral' font
+    with varying sizes and bold weight. Code blocks, tables, and metadata lines
+    are rendered in a fixed-pitch font for better alignment. Also sets a dimmer
+    foreground color for completed tasks and headlines marked as DONE."
+
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.0)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil
+                          :family "Spectral"
+                          :weight 'bold
+                          :box nil
+                          :height (cdr face)
+                          :foreground "#458588"))
+
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-meta-line nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
+
+    (set-face-attribute 'org-headline-done nil
+                        :foreground "#7c6f64")
+    (set-face-attribute 'org-done nil
+                        :foreground "#7c6f64"))
+#+end_src
+
+When working with src-blocks in org mode it is useful to automatically indent the code on each save.
+#+begin_src emacs-lisp
+  (defun my/indent-org-block-on-save ()
+    "Automatically indent the current Org source block before saving.
+
+    If point is inside a source block (`#+BEGIN_SRC ... #+END_SRC`)
+    re-indent the block using `org-indent-block`. Intended to be used
+    as a buffer-local `before-save-hook` in Org mode."
+    (when (org-in-src-block-p)
+      (org-indent-block)))
+
+  (defun my/add-org-block-indent-save-hook ()
+    "Add buffer-local before-save hook for org-block indentation."
+    (add-hook 'before-save-hook #'my/indent-org-block-on-save nil t))
+#+end_src
+
+In all buffers we use electric-pair-mode to automatically match a closing parenthesis whenever we type
+an opening parenthesis. This also works on < which is a problem in org-mode since we use that for
+org-tempo templates. This code disables electric-pair-mode for < and enables it via a hook to org-mode.
+#+begin_src emacs-lisp
+  (defun my/inhibit-electric-pair-in-org-mode (char)
+    "Prevent `electric-pair-mode` from pairing <"
+    (if (char-equal char ?<) t
+      (funcall (default-value 'electric-pair-inhibit-predicate) char)))
+
+  (defun my/org-mode-electric-pair-setup ()
+    "Set buffer-local pairing rules for Org mode."
+    (setq-local
+     electric-pair-inhibit-predicate #'my/inhibit-electric-pair-in-org-mode))
+#+end_src
+
+This code is only executed when working in this config file. It ensures that all code blocks are tangled to
+the correct file on each save. This way the config file is kept up to date and in a state that matches this file.
+#+begin_src emacs-lisp
+  (defun my/org-babel-tangle-config ()
+    "Automatically tangle the current Org file if it is the config file.
+
+    If the current buffer's file name matches 'my/config-filename'
+    this function runs 'org-babel-tangle' without confirmation to export all
+    source code blocks to their corresponding destination files.
+    Intended to be used in an `after-save-hook` to keep the tangled
+    configuration in sync."
+    (when (and (buffer-file-name)
+               (string-equal (file-truename (buffer-file-name))
+                             (file-truename
+  			    (expand-file-name my/config-filename))))
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (defun my/add-org-tangle-config-on-save ()
+    "Add buffer-local hook to tangle Org config on save."
+    (when (string-equal (file-truename (buffer-file-name))
+                        (file-truename (expand-file-name my/config-filename)))
+      (add-hook 'after-save-hook #'my/org-babel-tangle-config nil t)))
+#+end_src
+
+In the use-package declaration we make sure that all hooks and variables are set correctly.
+#+begin_src emacs-lisp
+  (use-package org
+    :mode ("\\.org\\'" . org-mode)
+    :hook ((org-mode . org-indent-mode)
+  	 (org-mode . variable-pitch-mode)
+  	 (org-mode . my/org-font-setup)
+  	 (org-mode . my/add-org-block-indent-save-hook)
+  	 (org-mode . my/add-org-tangle-config-on-save)
+  	 (org-mode . my/org-mode-electric-pair-setup))
+
+    :custom
+    (org-startup-indented t)
+    (org-startup-numerated t)
+    (org-ellipsis " ▾")
+
+    (org-hide-leading-stars nil)
+    (org-superstar-leading-bullet ?\s)
+    (org-indent-mode-turns-on-hiding-stars nil)
+
+    (org-log-done 'time)
+    (org-log-into-drawer t)
+    (org-agenda-start-with-log-mode t)
+    (org-agenda-window-setup 'current-window)
+    (org-agenda-start-on-weekday 1)
+    (org-agenda-files (list my/org-agenda-path))
+
+    (org-refile-targets
+     '(("tasks.org" :maxlevel . 1)))
+    (org-archive-location "archive.org::datetree/")
+
+    (org-confirm-babel-evaluate nil)
+
+    :config
+    (advice-add 'org-refile :after #'org-save-all-org-buffers)
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)))
+
+    (require 'org-tempo)
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python")))
+#+end_src
+
+*** Org Mode Appearance
+We use org-superstar to change the appearance of the leading stars in Org headlines.
+#+begin_src emacs-lisp
+  (use-package org-superstar
+    :ensure t
+    :after org
+    :hook (org-mode . org-superstar-mode)
+
+    :custom
+    (org-superstar-headline-bullets-list '("◤" "◆" "■" "□"))
+    (org-superstar-cycle-headline-bullets nil)
+    (org-superstar-leading-fallback ?\s)
+
+    :config
+    (set-face-attribute 'org-superstar-item nil :height 1.0)
+    (set-face-attribute 'org-superstar-header-bullet nil :height 1.0)
+    (set-face-attribute 'org-superstar-leading nil :height 1.0))
+#+end_src
+
+*** Export
+This package allows us to export org files to a large variety of different formats.
+#+begin_src emacs-lisp
+  (use-package ox-pandoc :ensure t)
+#+end_src
+
+We can even use org-mode to create presentations. Reveal.js is a framework for creating beautiful
+presentations that run i a web browser. ox-reveal allows us to export org-files as Reveal.js presentations.
+#+begin_src emacs-lisp
+  (use-package ox-reveal
+    :ensure t
+    :custom
+    (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+    (org-reveal-title-slide nil))
+#+end_src
+
+* Development
+** Git
+Obviously we use =magit= to manage git from within Emacs.
+#+begin_src emacs-lisp
+  (defun my/git-commit-setup ()
+    "Set up Git commit message buffer.
+  - Set English dictionary
+  - Display fill column indicator at 72
+  - Show guide overlay at column 50 for the subject line
+  - Enable auto-fill-mode for line wrapping"
+    (ispell-change-dictionary "en")
+    (setq-local fill-column 72)
+    (setq-local display-fill-column-indicator-column 72)
+    (display-fill-column-indicator-mode 1)
+    (auto-fill-mode 1))
+
+  (use-package magit
+    :ensure t
+    :hook (git-commit-setup . my/git-commit-setup))
+#+end_src
+
+* Custom Functions
+** Duplicate Line
+Here we add a function to easily duplicate the current line.
+*Credit:* pesche
+*Source:* [[https://stackoverflow.com/questions/88399/how-do-i-duplicate-a-whole-line-in-emacs][Stack Overflow]]
 #+begin_src emacs-lisp
   (defun duplicate-line (arg)
     "Duplicate current line, leaving point in lower line."
@@ -50,494 +560,7 @@
     ;; put the point in the lowest line and return
     (next-line arg))
 #+end_src
-
-* Development
-** Compilation
-#+begin_src emacs-lisp
-  (add-hook 'compilation-finish-functions 'switch-to-buffer-other-window 'compilation)
-#+end_src
-
-** LSP-mode
-#+begin_src emacs-lisp
-  (use-package lsp-mode
-    :init
-    (setq lsp-keymap-prefix "C-l")
-    :hook (
-           (rust-mode . lsp)
-           (python-mode . lsp)
-           (lsp-mode . lsp-enable-which-key-integration))
-    :commands lsp)
-
-  (use-package lsp-ui)
-#+end_src
-
-** Rust
-#+begin_src emacs-lisp
-  (use-package rustic)
-#+end_src
-
-** Python
-#+begin_src emacs-lisp
-  (use-package pyvenv)
-
-  (use-package lsp-pyright
-    :ensure t
-    :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
-    :hook (python-mode . (lambda ()
-                           (require 'lsp-pyright)
-                           (lsp))))  ; or lsp-deferred
-#+end_src
-
-* Packages
-** Initialize packages and package archives
-Add all archives and make sure use-package is enabled.
-#+begin_src emacs-lisp
-  (require 'package)
-
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")
-                           ( "jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/")
-                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
-
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-
-  (require 'use-package)
-  (setq use-package-always-ensure t)
-#+end_src
-
-** Ivy and counsel
-#+begin_src emacs-lisp
-  (use-package ivy
-    :diminish
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
-    :config
-    (ivy-mode 1))
-
-
-  (use-package counsel
-    :bind (("M-x" . counsel-M-x)
-           ("C-x b" . counsel-ibuffer)
-           ("C-x C-f" . counsel-find-file)
-           :map minibuffer-local-map
-           ("C-r" . 'counsel-minibuffer-history))
-    :config
-    (setq ivy-initial-inputs-alist nil))
-
-  (use-package ivy-rich
-    :init
-    (ivy-rich-mode 1))
-
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-#+end_src
-
-** Which-key
-Which-key is likely soon going to be added as standard to Emacs.
-#+begin_src emacs-lisp
-  (which-key-mode 1)
-#+end_src
-
-** Rainbow-delimiters
-#+begin_src emacs-lisp
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-#+end_src
-
-** Doom-modeline
-All the icon is used for doom-modeline. On first time install run M-x all-the-icons-install-fonts and M-x nerd-icons-install-fonts.
-#+begin_src emacs-lisp
-  (use-package all-the-icons
-    :if (display-graphic-p))
-
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
-
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-position-line-format nil)
-  (setq doom-modeline-position-column-format nil)
-#+end_src
-
-** Helpful
-#+begin_src emacs-lisp
-  (use-package helpful
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key))
-#+end_src
-
-** Magit
-#+begin_src emacs-lisp
-  (use-package magit)
-
-  (defun na/setup-commit-message ()
-    (ispell-change-dictionary "en")
-    (setq fill-column 70)
-    (setq display-fill-column-indicator-column 64))
-
-  (add-hook 'git-commit-setup-hook 'na/setup-commit-message)
-#+end_src
-
-** ox-pandoc
-*** Dependencies
-**** Pandoc
-#+begin_src emacs-lisp
-  (use-package ox-pandoc)
-#+end_src
-
-** org-reveal
-org-reveal-root is set to pull Reveal.JS from CDN so no install is required.
-#+begin_src emacs-lisp
-  (use-package ox-reveal)
-  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-  (setq org-reveal-title-slide nil)
-#+end_src
-
-** visual-fill-column-mode
-#+begin_src emacs-lisp
-  (setq-default fill-column 100)
-  (use-package visual-fill-column
-    :hook ((prog-mode . visual-line-fill-column-mode)
-           (text-mode . visual-line-fill-column-mode)))
-
-  (setq-default display-fill-column-indicator-column 94)
-  (set-face-attribute 'fill-column-indicator nil)
-  (global-display-fill-column-indicator-mode t)
-#+end_src
-
-** Company-mode
-#+begin_src emacs-lisp
-  (use-package company
-    :config
-    (setq company-minimum-prefix-length 1)
-    (setq company-idle-delay 0.0))
-#+end_src
-
-* Basic GUI configuration
-** The basics
-Remove all unwanted GUI Elements.
-#+begin_src emacs-lisp
-  (setq inhibit-startup-message t)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-  (menu-bar-mode -1)
-
-  (setq visible-bell t)
-  (setq ring-bell-function 'ignore)
-  (setq-default cursor-type 'bar)
-#+end_src
-
-** Setup line numbers
-Enable line numbers globally but disable for certain modes.
-#+begin_src emacs-lisp
-  (set-fringe-mode 10)
-
-  (column-number-mode)
-  (setq display-line-numbers-type 'relative)
-  (setq-default display-line-numbers-width 4)
-  (global-display-line-numbers-mode t)
-#+end_src
-
-** Theme settings
-#+begin_src emacs-lisp
-  (use-package gruvbox-theme)
-  (load-theme 'gruvbox-dark-hard t)
-  (set-face-attribute 'line-number nil
-                      :background (face-background 'default))
-  (set-face-attribute 'fringe nil
-                      :background (face-background 'default))
-#+end_src
-
-** Font settings
-Set default fonts as well as fonts for fixed pitch and variable pitch.
-
-#+begin_src emacs-lisp
-  (defvar na/default-font-size 120)
-  (defvar na/default-font-size-variable-pitch 125)
-
-  (set-face-attribute 'default nil :family "mononoki" :height na/default-font-size)
-  (set-face-attribute 'fixed-pitch nil :family "mononoki" :height na/default-font-size)
-  (set-face-attribute 'variable-pitch nil :family "Spectral" :height na/default-font-size-variable-pitch)
-
-#+end_src
-
-** Calendar
-#+begin_src emacs-lisp
-  (setq calendar-week-start-day 1)
-  (setq window-combination-resize t
-        split-width-threshold 300)
-
-  (copy-face font-lock-constant-face 'calendar-iso-week-face)
-  (set-face-attribute 'calendar-iso-week-face nil
-                      :height 0.7)
-  (setq calendar-intermonth-text
-        '(propertize
-          (format "%2d"
-                  (car
-                   (calendar-iso-from-absolute
-                    (calendar-absolute-from-gregorian (list month day year)))))
-          'font-lock-face 'calendar-iso-week-face))
-
-  (copy-face 'default 'calendar-iso-week-header-face)
-  (set-face-attribute 'calendar-iso-week-header-face nil
-                      :height 0.7)
-  (setq calendar-intermonth-header
-        (propertize "Wk"
-                    'font-lock-face 'calendar-iso-week-header-face))
-#+end_src
-
-* Org-mode
-** Setup org-mode
-*** Org-mode font setup
-#+begin_src emacs-lisp
-  (defun na/org-font-setup ()
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.0)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.0)
-                    (org-level-6 . 1.0)
-                    (org-level-7 . 1.0)
-                    (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil
-                          :family "Spectral"
-                          :weight 'bold
-                          :box nil
-                          :height (cdr face)
-                          :foreground "#458588"))
-
-    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :background nil)
-    (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box nil :background nil)
-    (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch :underline nil :foreground nil :extend t :box nil :background nil)
-    (set-face-attribute 'org-headline-done nil
-                        :foreground "#7c6f64")
-    (set-face-attribute 'org-done nil
-                        :foreground "#7c6f64"))
-#+end_src
-
-*** Org-mode hook
-#+begin_src emacs-lisp
-  (defun na/org-mode-hook ()
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (na/org-font-setup))
-#+end_src
-
-*** Org-mode setup
-#+begin_src emacs-lisp
-  (defun na/org-mode-setup ()
-    (setq org-ellipsis " ▾")
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-
-    (setq org-refile-targets
-          '(("tasks.org" :maxlevel . 1)))
-
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
-    (setq org-archive-location "archive.org::datetree/"))
-
-#+end_src
-
-*** Org-mode agenda setup
-#+begin_src emacs-lisp
-  (defun na/org-agenda-setup ()
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-agenda-window-setup 'current-window)
-    (setq org-agenda-files (list na/org-agenda-path))
-    (setq org-agenda-start-on-weekday 1))
-#+end_src
-
-*** Load org-mode
-#+begin_src emacs-lisp
-  (use-package org
-    :hook (org-mode . na/org-mode-hook)
-    :config
-    (na/org-mode-setup)
-    (na/org-agenda-setup))
-#+end_src
-
-** Org-superstar
-#+begin_src emacs-lisp
-  (use-package org-superstar
-    :after org
-    :hook (org-mode . org-superstar-mode))
-
-  (with-eval-after-load 'org-superstar
-    (set-face-attribute 'org-superstar-item nil :height 1.0)
-    (set-face-attribute 'org-superstar-header-bullet nil :height 1.0)
-    (set-face-attribute 'org-superstar-leading nil :height 1.0))
-
-  (setq org-superstar-headline-bullets-list
-        '("◤" "◆" "■" "□"))
-
-  (setq org-superstar-cycle-headline-bullets nil)
-
-  (setq org-superstar-leading-fallback ?\s)
-
-  (setq org-hide-leading-stars nil)
-  (setq org-superstar-leading-bullet ?\s)
-  (setq org-indent-mode-turns-on-hiding-stars nil)
-#+end_src
-
-** Org-babel
-#+begin_src emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (python . t)))
-
-  (setq org-confirm-babel-evaluate nil)
-
-  (require 'org-tempo)
-
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-
-  (defun na/indent-org-block-on-save ()
-    (when (org-in-src-block-p)
-      (org-indent-block)))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'before-save-hook #'na/indent-org-block-on-save nil t)))
-#+end_src
-
-** Jupyter export
-Enables export from org-mode to Jupyter. Package need to be manually downloaded from https://github.com/zaeph/ox-ipynb.
-#+begin_src emacs-lisp
-  (use-package ox-ipynb
-    :load-path "~/.emacs.d/lisp/")
-#+end_src
-
-** Org-download
-#+begin_src emacs-lisp
-  (use-package org-download)
-#+end_src
-
-** Auto-tangle config on save
-Enable org mode to automatically write source blocks to the correct config file on save.
-#+begin_src emacs-lisp
-  (defvar na/config-filename
-    (format "%sProjects/Emacs-Configuration/emacs.org" na/home-directory))
-
-  (defun na/org-babel-tangle-config ()
-    (when (string-equal (buffer-file-name)
-                        (expand-file-name na/config-filename))
-      ;; Dynamic scoping to the rescue
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'na/org-babel-tangle-config)))
-#+end_src
-
-* Behavior settings
-** Locale and character encoding
-#+begin_src emacs-lisp
-  (set-language-environment 'utf-8)
-  (setq locale-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-selection-coding-system
-   (if (eq system-type 'windows-nt)
-       'utf-16-le
-     'utf-8))
-  (prefer-coding-system 'utf-8)
-
-  (setq system-time-locale "C")
-#+end_src
-
-** Default folder
-#+begin_src emacs-lisp
-  (cd na/home-directory)
-#+end_src
-
-** Text handling
-#+begin_src emacs-lisp
-  (delete-selection-mode 1)
-#+end_src
-
-** Spell-checking
-#+begin_src emacs-lisp
-  (when (string-equal system-type "windows-nt")
-    (setq ispell-program-name "C:\\msys64\\usr\\bin\\aspell")
-    (setq ispell-aspell-data-dir "C:\\msys64\\usr\\lib\\aspell-0.60\\")
-    (setq ispell-aspell-dict-dir "C:\\msys64\\usr\\lib\\aspell-0.60\\"))
-
-  (setq ispell-local-dictionary "sv")
-
-  (use-package flyspell
-    :ensure t
-    :init
-    (add-hook 'org-mode-hook
-              (lambda () (flyspell-mode 1)))
-    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
-#+end_src
-
-*** Setup for Windows
-1. Install MSYS2 from https://www.msys2.org/ .
-2. Install package aspell and make using commands  "pacman -S aspell" and "pacman -S make"
-3. Downloads dictionaries from https://ftp.gnu.org/gnu/aspell/dict/0index.html#0.60
-4. Unpack dictionaries to a folder in MSYS2.
-5. Browse to folder and run "./configure", "make" and "make install"
-
-** Remove whitespaces
-#+begin_src emacs-lisp
-  (add-hook 'before-save-hook #'delete-trailing-whitespace)
-#+end_src
-
-** Auto-complete brackets
-#+begin_src emacs-lisp
-  (electric-pair-mode 1)
-  (add-hook 'org-mode-hook (lambda ()
-  			   (setq-local electric-pair-inhibit-predicate
-  				       `(lambda (c)
-  					  (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
-
-  (show-paren-mode 1)
-#+end_src
-
-** Backup files
-#+begin_src emacs-lisp
-  (setq backup-directory-alist
-        `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms
-        `((".*" ,temporary-file-directory t)))
-#+end_src
-
-** Set custom file
-#+begin_src emacs-lisp
-  (setq custom-file "~/.emacs.d/emacs-custom.el")
-  (load custom-file)
-#+end_src
-
-** Custom keybindings
+*  Custom key bindings
 #+begin_src emacs-lisp
   (define-minor-mode na/keymap-mode
     "My custom keymap"
@@ -550,7 +573,8 @@ Enable org mode to automatically write source blocks to the correct config file 
   (global-na/keymap-mode 1)
 
   (define-key na/keymap-mode-map (kbd "C-c g") 'magit)
-  (define-key na/keymap-mode-map (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
+  (define-key na/keymap-mode-map
+  	    (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
   (define-key na/keymap-mode-map (kbd "C-c c") 'org-capture)
   (define-key na/keymap-mode-map (kbd "C-c l") 'ispell-change-dictionary)
   (define-key na/keymap-mode-map (kbd "C-c a") 'org-agenda)
@@ -559,10 +583,7 @@ Enable org mode to automatically write source blocks to the correct config file 
   (define-key na/keymap-mode-map (kbd "C-c <right>") 'windmove-right)
   (define-key na/keymap-mode-map (kbd "C-c <up>") 'windmove-up)
   (define-key na/keymap-mode-map (kbd "C-c <down>") 'windmove-down)
-#+end_src
 
-** Stored registers
-#+begin_src emacs-lisp
   (set-register ?e (cons 'file na/config-filename))
   (set-register ?r '(buffer . "*scratch*"))
   (set-register ?t (cons 'file (format "%stasks.org" na/org-agenda-path)))
