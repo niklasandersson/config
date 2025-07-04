@@ -601,14 +601,14 @@ Here we add a function to easily duplicate the current line.
   (define-key na/keymap-mode-map (kbd "C-c <up>") 'windmove-up)
   (define-key na/keymap-mode-map (kbd "C-c <down>") 'windmove-down)
 
-  (set-register ?e (cons 'file na/config-filename))
+  (set-register ?e (cons 'file my/config-filename))
   (set-register ?r '(buffer . "*scratch*"))
-  (set-register ?t (cons 'file (format "%stasks.org" na/org-agenda-path)))
-  (set-register ?m (cons 'file (format "%smeetings.org" na/org-agenda-path)))
+  (set-register ?t (cons 'file (format "%stasks.org" my/org-agenda-path)))
+  (set-register ?m (cons 'file (format "%smeetings.org" my/org-agenda-path)))
 
-  (when (string-equal na/config-type "personal")
-    (set-register ?p (cons 'file (format "%spersonligt.org" na/org-agenda-path))))
+  (when (string-equal my/config-type "personal")
+    (set-register ?p (cons 'file (format "%spersonligt.org" my/org-agenda-path))))
 
-  (when (string-equal na/config-type "work")
-    (set-register ?s (cons 'file (format "%sstudents.org" na/org-agenda-path))))
+  (when (string-equal my/config-type "work")
+    (set-register ?s (cons 'file (format "%sstudents.org" my/org-agenda-path))))
 #+end_src
