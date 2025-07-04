@@ -201,9 +201,18 @@ requires an MSYS2 installation for access to aspell.
 
   (setq ispell-local-dictionary "sv")
 
+  (defun my/set-flyspell-language-for-config ()
+    "Use English dictionary for spell checking when editing the config file."
+    (when (and (buffer-file-name)
+               (string-equal (file-truename (buffer-file-name))
+                             (file-truename
+  			    (expand-file-name my/config-filename))))
+      (ispell-change-dictionary "en")))
+
   (use-package flyspell
     :hook ((org-mode . flyspell-mode)
-  	 (git-commit-setup . git-commit-turn-on-flyspell))
+  	 (git-commit-setup . git-commit-turn-on-flyspell)
+  	 (flyspell-mode . my/set-flyspell-language-for-config))
     :custom
     (flyspell-issue-message-flag nil))
 #+end_src
