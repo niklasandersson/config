@@ -234,6 +234,8 @@ We also need to configure some basic GUI elements that we want to apply for all 
   (setq-default cursor-type 'bar)
   (set-fringe-mode 10)
   (setq-default display-line-numbers-width 4)
+  (setq-default display-fill-column-indicator-column 80)
+  (setq-default display-fill-column-indicator-character ?¦)
 #+end_src
 
 ** Theme
@@ -330,6 +332,7 @@ limit. =olivetti-mode= is used to center the page in the window.
     :defer t
     :hook (text-mode . olivetti-mode))
 #+end_src
+
 ** Org Mode
 Org-mode has a lot of options to configure. We separate the config into multiple
 functions that we can call as hooks to org-mode. First we define our font setup for org-mode.
@@ -508,8 +511,16 @@ presentations that run i a web browser. ox-reveal allows us to export org-files 
 #+end_src
 
 * Development
-** Appearance
+** Programming Buffers
+This section configures the default behavior and visual appearance of programming buffers.
 #+begin_src emacs-lisp
+  (defun my/prog-mode-setup ()
+    (setq-local truncate-lines t)
+    (display-line-numbers-mode 1)
+    (display-fill-column-indicator-mode 1))
+
+  (add-hook 'prog-mode-hook #'my/prog-mode-setup)
+
   (use-package rainbow-delimiters
     :ensure t
     :defer t
