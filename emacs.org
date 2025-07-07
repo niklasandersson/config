@@ -520,11 +520,7 @@ presentations that run i a web browser. ox-reveal allows us to export org-files 
 Obviously we use =magit= to manage git from within Emacs.
 #+begin_src emacs-lisp
   (defun my/git-commit-setup ()
-    "Set up Git commit message buffer.
-  - Set English dictionary
-  - Display fill column indicator at 72
-  - Show guide overlay at column 50 for the subject line
-  - Enable auto-fill-mode for line wrapping"
+    "Set up Git commit message buffer."
     (ispell-change-dictionary "en")
     (setq-local fill-column 72)
     (setq-local display-fill-column-indicator-column 50)
