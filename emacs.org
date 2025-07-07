@@ -527,6 +527,19 @@ This section configures the default behavior and visual appearance of programmin
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
+** Scratch Buffer
+Here we find the configuration for the scratch buffer.
+#+begin_src emacs-lisp
+  (setq initial-scratch-message nil)
+
+  (defun my/scratch-buffer-setup ()
+    (setq-local truncate-lines nil)
+    (setq-local fill-column 80)
+    (auto-fill-mode 1))
+
+  (add-hook 'lisp-interaction-mode-hook #'my/scratch-buffer-setup)
+#+end_src
+
 ** Git
 Obviously we use =magit= to manage git from within Emacs.
 #+begin_src emacs-lisp
