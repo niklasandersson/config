@@ -48,7 +48,7 @@ throughout the config.
           (t "~/")))
 
   (defvar my/default-font-size 120)
-  (defvar my/default-font-size-variable-pitch 125)
+  (defvar my/default-font-size-variable-pitch 120)
 
   (defvar my/config-filename
     (format "%sProjects/config/emacs.org" my/home-directory))
@@ -282,7 +282,7 @@ org-mode will use both.
   		    :family "mononoki"
   		    :height my/default-font-size)
   (set-face-attribute 'variable-pitch nil
-  		    :family "Spectral"
+  		    :family "Noto Serif"
   		    :height my/default-font-size-variable-pitch)
 #+end_src
 
