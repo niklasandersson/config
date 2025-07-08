@@ -690,6 +690,7 @@ Here we add a function to easily duplicate the current line.
     ;; put the point in the lowest line and return
     (next-line arg))
 #+end_src
+
 *  Custom key bindings
 #+begin_src emacs-lisp
   (define-minor-mode na/keymap-mode
@@ -703,10 +704,9 @@ Here we add a function to easily duplicate the current line.
   (global-na/keymap-mode 1)
 
   (define-key na/keymap-mode-map (kbd "C-c g") 'magit)
-  (define-key na/keymap-mode-map
-  	    (kbd "C-c s") 'flyspell-check-previous-highlighted-word)
   (define-key na/keymap-mode-map (kbd "C-c c") 'org-capture)
-  (define-key na/keymap-mode-map (kbd "C-c l") 'ispell-change-dictionary)
+  (define-key na/keymap-mode-map (kbd "C-c C-c l") 'ispell-change-dictionary)
+  (define-key na/keymap-mode-map (kbd "C-c C-c C-l") 'ispell-change-dictionary)
   (define-key na/keymap-mode-map (kbd "C-c a") 'org-agenda)
   (define-key na/keymap-mode-map (kbd "C-c d") 'duplicate-line)
   (define-key na/keymap-mode-map (kbd "C-c <left>") 'windmove-left)
