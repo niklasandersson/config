@@ -566,7 +566,8 @@ Here we find the configuration for the scratch buffer.
   (defun my/scratch-buffer-setup ()
     (setq-local truncate-lines nil)
     (setq-local fill-column 80)
-    (auto-fill-mode 1))
+    (auto-fill-mode 1)
+    (corfu-mode -1))
 
   (add-hook 'lisp-interaction-mode-hook #'my/scratch-buffer-setup)
 #+end_src
