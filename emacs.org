@@ -51,7 +51,7 @@ throughout the config.
   (defvar my/default-font-size-variable-pitch 125)
 
   (defvar my/config-filename
-    (format "%sProjects/Emacs-Configuration/emacs.org" my/home-directory))
+    (format "%sProjects/config/emacs.org" my/home-directory))
 #+end_src
 
 Some variables are system specific or to sensitive to keep in version control so
