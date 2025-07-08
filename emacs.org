@@ -528,7 +528,7 @@ presentations that run i a web browser. ox-reveal allows us to export org-files 
 #+end_src
 
 * Development
-** Programming Buffers
+** Default settings
 This section configures the default behavior and visual appearance of programming buffers.
 #+begin_src emacs-lisp
   (defun my/prog-mode-setup ()
@@ -537,6 +537,20 @@ This section configures the default behavior and visual appearance of programmin
     (display-fill-column-indicator-mode 1))
 
   (add-hook 'prog-mode-hook #'my/prog-mode-setup)
+
+  (use-package corfu
+    :ensure t
+    :defer t
+    :hook ((prog-mode . corfu-mode)
+  	 (shell-mode . corfu-mode)
+  	 (eshell-mode . corfu-mode))
+
+    :custom
+    (corfu-auto t)
+    (corfu-auto-delay 0.1)
+    (corfu-auto-prefix 1)
+    (corfu-quit-no-match 'separator)
+    (corfu-cycle t))
 
   (use-package rainbow-delimiters
     :ensure t
@@ -571,6 +585,67 @@ Obviously we use =magit= to manage git from within Emacs.
   (use-package magit
     :ensure t
     :hook (git-commit-setup . my/git-commit-setup))
+#+end_src
+
+** Flymake
+Flymake is used together with lsp-mode but first we make sure it is setup the way we like it.
+#+begin_src emacs-lisp
+  (defun my/flymake-theme-setup ()
+    (set-face-attribute 'flymake-error nil
+                        :underline nil :background "#4C3743")
+    (set-face-attribute 'flymake-warning nil
+                        :underline nil :background "#45443C")
+    (set-face-attribute 'flymake-note nil
+                        :underline nil :background "#3C4841"))
+
+  (use-package flymake
+    :defer t
+    :hook (flymake-mode . my/flymake-theme-setup)
+    :custom
+    (flymake-indicator-type nil)
+    (flymake-fringe-indicator-position nil))
+#+end_src
+
+** Language Server Protocol
+We enable lsp-mode for certain programming languages and give it a minimalistic
+appearance.
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :defer t
+    :commands (lsp lsp-deferred)
+
+    :hook ((python-mode . lsp-deferred))
+
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+
+    :custom
+    (lsp-completion-provider :capf)
+    (lsp-lens-enable nil)
+    (lsp-headerline-breadcrumb-enable nil)
+    (lsp-signature-auto-activate nil)
+    (lsp-signature-render-documentation nil)
+
+    :config
+    (lsp-enable-which-key-integration t))
+
+  (use-package lsp-ivy
+    :ensure t
+    :after (lsp-mode ivy))
+#+end_src
+
+** Python
+Here we configure Python language support.
+#+begin_src emacs-lisp
+  (use-package lsp-pyright
+    :ensure t
+    :after lsp-mode
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp-deferred)))
+
+    :custom (lsp-pyright-langserver-command "pyright"))
 #+end_src
 
 * Custom Functions
