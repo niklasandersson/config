@@ -22,8 +22,9 @@ with Flyspell.
 Use your system's package manager to install aspell and the dictionaries you need (aspell-en, aspell-sv).
 
 *** Windows
-- Download and install MSYS2 from the official website: [[https://www.msys2.org/][msys2.org]]. Make sure to follow the
-  installation and update instructions on their site  (run pacman -Syu after installation).
+- Download and install MSYS2 from the official website: [[https://www.msys2.org/][msys2.org]]. Make sure to
+  follow the installation and update instructions on their site  (run pacman
+  -Syu after installation).
 - Open the MSYS2 MSYS terminal (not MinGW), and install Aspell and make by running:
   =pacman -S aspell make=.
 - Visit the GNU Aspell dictionary download page:
