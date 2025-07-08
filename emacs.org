@@ -53,8 +53,8 @@ throughout the config.
     (format "%sProjects/Emacs-Configuration/emacs.org" my/home-directory))
 #+end_src
 
-Some variables are system specific or to sensitive to keep in version control so we load them from an
-external file.
+Some variables are system specific or to sensitive to keep in version control so
+we load them from an external file.
 #+begin_src emacs-lisp
   (load "~/.emacs.d/lisp/external_variables.el")
 #+end_src
@@ -81,8 +81,8 @@ Here we add all archives that we install packages from and make sure that =use-p
 #+end_src
 
 ** Character Encoding
-Ensure consistent UTF-8 encoding across Emacs, including files, terminal, clipboard, and internal
-operations. Use "C" locale to avoid localized weekday/month names in timestamps.
+Ensure consistent UTF-8 encoding across Emacs, including files, terminal,
+clipboard, and internal operations. Use "C" locale to avoid localized weekday/month names in timestamps.
 #+begin_src emacs-lisp
   (set-language-environment 'utf-8)
   (setq locale-coding-system 'utf-8)
@@ -129,8 +129,7 @@ Enable all text handling features that should be default for all buffers.
 #+end_src
 
 ** Navigation and Minibuffer Completion
-In this section we configure Ivy, Counsel, and Ivy-Rich to replace Emacs'
-default interface for executing commands, opening files, switching buffers, and searching text.
+In this section we configure Ivy, Counsel, and Ivy-Rich to replace Emacs' default interface for executing commands, opening files, switching buffers, and searching text.
 #+begin_src emacs-lisp
   (use-package ivy
     :ensure t
@@ -191,8 +190,8 @@ informative and interactive help buffers.
 #+end_src
 
 ** Spell Check
-This code enables automatic spell checking in selected modes. Setup is a bit tricky on Windows and
-requires an MSYS2 installation for access to aspell.
+This code enables automatic spell checking in selected modes. Setup is a bit
+tricky on Windows and requires an MSYS2 installation for access to aspell.
 #+begin_src emacs-lisp
   (when (eq system-type 'windows-nt)
     (setq ispell-program-name my/ispell-program-name)
@@ -256,9 +255,9 @@ We also need to configure some basic GUI elements that we want to apply for all 
 #+end_src
 
 ** Theme
-Enable a nice looking theme. Some themes have an contrasting background color for the fringes.
-We set the fringe and line number backgrounds to the default background so that
-they blend in with the rest of the frame.
+Enable a nice looking theme. Some themes have an contrasting background color
+for the fringes. We set the fringe and line number backgrounds to the default
+background so that they blend in with the rest of the frame.
 #+begin_src emacs-lisp
   (use-package gruvbox-theme
     :ensure t
@@ -410,9 +409,9 @@ When working with src-blocks in org mode it is useful to automatically indent th
     (add-hook 'before-save-hook #'my/indent-org-block-on-save nil t))
 #+end_src
 
-In all buffers we use electric-pair-mode to automatically match a closing parenthesis whenever we type
-an opening parenthesis. This also works on < which is a problem in org-mode since we use that for
-org-tempo templates. This code disables electric-pair-mode for < and enables it via a hook to org-mode.
+In all buffers we use electric-pair-mode to automatically match a closing
+parenthesis whenever we type an opening parenthesis. This also works on < which
+is a problem in org-mode since we use that for org-tempo templates. This code disables electric-pair-mode for < and enables it via a hook to org-mode.
 #+begin_src emacs-lisp
   (defun my/inhibit-electric-pair-in-org-mode (char)
     "Prevent `electric-pair-mode` from pairing <"
@@ -425,8 +424,8 @@ org-tempo templates. This code disables electric-pair-mode for < and enables it 
      electric-pair-inhibit-predicate #'my/inhibit-electric-pair-in-org-mode))
 #+end_src
 
-This code is only executed when working in this config file. It ensures that all code blocks are tangled to
-the correct file on each save. This way the config file is kept up to date and in a state that matches this file.
+This code is only executed when working in this config file. It ensures that all
+code blocks are tangled to the correct file on each save. This way the config file is kept up to date and in a state that matches this file.
 #+begin_src emacs-lisp
   (defun my/org-babel-tangle-config ()
     "Automatically tangle the current Org file if it is the config file.
@@ -521,8 +520,8 @@ This package allows us to export org files to a large variety of different forma
   (use-package ox-pandoc :ensure t)
 #+end_src
 
-We can even use org-mode to create presentations. Reveal.js is a framework for creating beautiful
-presentations that run i a web browser. ox-reveal allows us to export org-files as Reveal.js presentations.
+We can even use org-mode to create presentations. Reveal.js is a framework for
+creating beautiful presentations that run i a web browser. ox-reveal allows us to export org-files as Reveal.js presentations.
 #+begin_src emacs-lisp
   (use-package ox-reveal
     :ensure t
