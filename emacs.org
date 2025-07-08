@@ -640,6 +640,14 @@ appearance.
     :after (lsp-mode ivy))
 #+end_src
 
+** Nix
+Add support for .nix-files that are use to configure NixOS.
+#+begin_src emacs-lisp
+  (use-package nix-mode
+    :ensure t
+    :mode "\\.nix\\'")
+#+end_src
+
 ** Python
 Here we configure Python language support.
 #+begin_src emacs-lisp
