@@ -171,8 +171,7 @@ In this section we configure Ivy, Counsel, and Ivy-Rich to replace Emacs' defaul
 #+end_src
 
 With =ace-window= we can easily jump between multiple windows and mange the layout
-of our frames. =winner-mode= gives us the ability to undo and redo windows
-layouts.
+of our frames. =winner-mode= gives us the ability to undo and redo windows layouts.
 #+begin_src emacs-lisp
   (use-package ace-window
     :ensure t
@@ -189,8 +188,8 @@ layouts.
 #+end_src
 
 ** Help System
-This section replaces and extends the help system with the helpful package which provides more
-informative and interactive help buffers.
+This section replaces and extends the help system with the helpful package which
+provides more informative and interactive help buffers.
 #+begin_src emacs-lisp
   (use-package helpful
     :ensure t
