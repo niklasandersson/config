@@ -182,7 +182,22 @@ of our frames. =winner-mode= gives us the ability to undo and redo windows layou
     (aw-dispatch-always t)
 
     :config
-    (set-face-attribute 'aw-leading-char-face nil :height 2))
+    (set-face-attribute 'aw-leading-char-face nil
+      		      :height (+ my/default-font-size 20)))
+  (defvar aw-dispatch-alist
+    '((?x aw-delete-window "Delete Window")
+      (?m aw-swap-window "Swap Windows")
+      (?M aw-move-window "Move Window")
+      (?c aw-copy-window "Copy Window")
+      (?j aw-switch-buffer-in-window "Select Buffer")
+      (?n aw-flip-window)
+      (?u aw-switch-buffer-other-window "Switch Buffer Other Window")
+      (?c aw-split-window-fair "Split Fair Window")
+      (?- aw-split-window-vert "Split Vert Window")
+      (?/ aw-split-window-horz "Split Horz Window")
+      (?o delete-other-windows "Delete Other Windows")
+      (?? aw-show-dispatch-help))
+    "List of actions for `aw-dispatch-default'.")
 
   (winner-mode 1)
 #+end_src
