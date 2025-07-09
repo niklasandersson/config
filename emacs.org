@@ -483,6 +483,7 @@ In the use-package declaration we make sure that all hooks and variables are set
     (org-startup-indented t)
     (org-startup-numerated t)
     (org-ellipsis " ▾")
+    (org-hide-emphasis-markers t)
 
     (org-hide-leading-stars nil)
     (org-superstar-leading-bullet ?\s)
