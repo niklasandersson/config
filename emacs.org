@@ -292,14 +292,7 @@ Enable a nice looking theme. Some themes have an contrasting background color
 for the fringes. We set the fringe and line number backgrounds to the default
 background so that they blend in with the rest of the frame.
 #+begin_src emacs-lisp
-  (use-package gruvbox-theme
-    :ensure t
-    :config
-    (set-face-attribute 'line-number nil
-                        :background (face-background 'default))
-    (set-face-attribute 'fringe nil
-                        :background (face-background 'default)))
-
+  (use-package gruvbox-theme :ensure t)
   (load-theme 'gruvbox-dark-hard t)
 #+end_src
 
@@ -571,7 +564,11 @@ This section configures the default behavior and visual appearance of programmin
   (defun my/prog-mode-setup ()
     (setq-local truncate-lines t)
     (display-line-numbers-mode 1)
-    (display-fill-column-indicator-mode 1))
+    (display-fill-column-indicator-mode 1)
+    (set-face-attribute 'line-number nil
+                        :background (face-background 'default))
+    (set-face-attribute 'fringe nil
+                        :background (face-background 'default)))
 
   (add-hook 'prog-mode-hook #'my/prog-mode-setup)
 
