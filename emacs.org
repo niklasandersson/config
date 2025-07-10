@@ -328,21 +328,24 @@ org-mode will use both.
 Some packages, such as doom-modeline, uses additional icons for certain
 elements. We make them available trough the package =nerd-icons=.
 #+begin_src emacs-lisp
-  (use-package nerd-icons :ensure t)
+  (use-package nerd-icons
+    :ensure t
+    :defer t)
 #+end_src
 
 ** Mode Line
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :ensure t
-    :defer 0
-
+    :defer t
     :custom
     (doom-modeline-buffer-encoding nil)
     (doom-modeline-position-line-format nil)
     (doom-modeline-position-column-format nil)
 
     :config (doom-modeline-mode 1))
+
+  (run-at-time "0.5 sec" nil #'doom-modeline-mode)
 #+end_src
 
 ** Calendar
