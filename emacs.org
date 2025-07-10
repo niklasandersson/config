@@ -560,7 +560,9 @@ We use org-superstar to change the appearance of the leading stars in Org headli
 *** Export
 This package allows us to export org files to a large variety of different formats.
 #+begin_src emacs-lisp
-  (use-package ox-pandoc :ensure t)
+  (use-package ox-pandoc
+    :ensure t
+    :after org)
 #+end_src
 
 We can even use org-mode to create presentations. Reveal.js is a framework for
@@ -568,6 +570,7 @@ creating beautiful presentations that run i a web browser. ox-reveal allows us t
 #+begin_src emacs-lisp
   (use-package ox-reveal
     :ensure t
+    :after org
     :custom
     (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
     (org-reveal-title-slide nil))
