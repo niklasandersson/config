@@ -665,14 +665,15 @@ Flymake is used together with lsp-mode but first we make sure it is setup the wa
 
 ** Language Server Protocol
 We enable lsp-mode for certain programming languages and give it a minimalistic
-appearance.
+appearance. With this config =lsp-mode= will not start automatically when opening
+any files. This is done because the LSP is not always desired and it adds to the
+startup time. Add a hook to the =use-package) declaration below to enable auto
+start of the LSP.
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :ensure t
     :defer t
     :commands (lsp lsp-deferred)
-
-    :hook ((python-mode . lsp-deferred))
 
     :init
     (setq lsp-keymap-prefix "C-c l")
