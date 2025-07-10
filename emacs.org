@@ -288,6 +288,7 @@ Emacs has a lot of unwanted GUI elements that we need to disable.
   (menu-bar-mode -1)
   (setq visible-bell t)
   (setq ring-bell-function 'ignore)
+  (setq use-dialog-box nil)
 #+end_src
 
 We also need to configure some basic GUI elements that we want to apply for all buffers.
