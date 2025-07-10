@@ -170,6 +170,13 @@ In this section we configure Ivy, Counsel, and Ivy-Rich to replace Emacs' defaul
     (which-key-mode 1))
 #+end_src
 
+Avy is used to quickly jump around the visible part of a buffer.
+#+Begin_src emacs-lisp
+  (use-package avy
+    :ensure t
+    :bind ("C-'" . avy-goto-char-2))
+#+end_src
+
 With =ace-window= we can easily jump between multiple windows and mange the layout
 of our frames. =winner-mode= gives us the ability to undo and redo windows layouts.
 #+begin_src emacs-lisp
@@ -486,6 +493,9 @@ In the use-package declaration we make sure that all hooks and variables are set
   	 (org-mode . my/add-org-tangle-config-on-save)
   	 (org-mode . my/org-mode-electric-pair-setup))
 
+    :bind (:map org-mode-map
+  	      ("C-," . nil)
+                ("C-'" . nil))
     :custom
     (org-startup-indented t)
     (org-startup-numerated t)
