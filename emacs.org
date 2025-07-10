@@ -754,7 +754,7 @@ Here we add a function to easily duplicate the current line.
 
 ** Init time
 We redefine the =startup-echo-area-message= function to display the time it took
-to initialize Emacs on start up.
+to initialize Emacs on startup.
 #+begin_src emacs-lisp
   (defun startup-echo-area-message ()
     (format "Init time: %s." (emacs-init-time)))
