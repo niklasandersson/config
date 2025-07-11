@@ -715,6 +715,10 @@ Here we configure Python language support.
                            (lsp-deferred)))
 
     :custom (lsp-pyright-langserver-command "pyright"))
+
+  (use-package pyvenv
+    :ensure t
+    :commands (pyvenv-activate))
 #+end_src
 
 * Custom Functions
